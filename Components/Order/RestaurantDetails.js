@@ -12,7 +12,7 @@ class RestaurantDetails extends React.Component {
    
     componentDidMount() {
         // axios.get(`https://localhost:44312/api/Users/${this.state.userId}`).then(response => {
-        var test = this.props.navigation.getParam('restaurantData');
+        var test = this.props.navigation.getParam('restaurantId');
         this.setState({ restaurantData: this.props.navigation.getParam('restaurantData') });
         console.log('Restaurant Details => ', test);
 

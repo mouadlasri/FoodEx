@@ -15,11 +15,7 @@ class HomeRestaurants extends React.Component {
         this.state = {
             userId: '',
             restaurantData: [],
-            entries: [
-                { title: 'hello' },
-                { title: 'world' },
-                {title: 'test', text:'test text'}
-            ]
+            selectedRestaurantId: ''
         }
         
         this._renderItem = this._renderItem.bind(this);
@@ -29,7 +25,7 @@ class HomeRestaurants extends React.Component {
         // this.props.navigation.navigate('Login');
         this.props.navigation.navigate('RestaurantDetails');
 
-        console.log('====================== ORDER HAAAAAAAAAANDLER ====================');
+        console.log(`====================== ORDER HAAAAAAAAAANDLER==================== `);
     }
 
     componentDidMount() {
@@ -55,11 +51,14 @@ class HomeRestaurants extends React.Component {
                         <Paragraph>Located in {item.restaurantLocation}</Paragraph>
                         <Paragraph>{item.restaurantDescription}</Paragraph>
                         <Paragraph style={{ marginBottom: 20 }}>Average Waiting Time: {item.waitingTime}</Paragraph>
-                        <Button title="Make an order" style={{ marginTop: 20 }} onPress={this.orderHandler} ></Button>
+                        {/* <Button title="Make an order" style={{ marginTop: 20 }} key={index} onPress={this.orderHandler} ></Button> */}
 
-                        {/* <TouchableOpacity style={styles.orderButton} onClick={this.orderHandler} >
+                        <TouchableOpacity style={styles.orderButton}
+                            onPress={() => { 
+                                this.props.navigation.navigate('RestaurantDetails', {'restaurantId': item});
+                            }} >
                             <Text style={styles.orderButtonText}>Make an order</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                         {/* <Button title="Make an order" style={{ marginTop: 20 }} onClick={this.orderHandler}></Button> */}
                     </Card.Content>
                 </Card>
@@ -71,7 +70,6 @@ class HomeRestaurants extends React.Component {
         
         return (
             <View style={styles.homeRestaurantsContainer}>
-                <Button title="Make an order" style={{ marginTop: 20 }} onClick={this.orderHandler}></Button>
 
                 <Carousel
                     ref={(c) => { this._carousel = c; }}
@@ -79,9 +77,8 @@ class HomeRestaurants extends React.Component {
                     renderItem={this._renderItem}
                     sliderWidth={sliderWidth}
                     itemWidth={itemWidth}
-                    onClick={this.orderHandler}
+                    // onClick={this.orderHandler}
                 />
-                <Button title="Make an order" style={{ marginTop: 20 }} onClick={this.orderHandler}></Button>
 
             </View>
         );
