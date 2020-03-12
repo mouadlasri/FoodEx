@@ -1,9 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import { TextField } from '@material-ui/core';
-import { NavigationContainer } from '@react-navigation/native';
-// import { Alert } from '@material-ui/core/';
-
+import { Input } from 'react-native-elements';
+import { StyleSheet, Text, View, Button, TextInput, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
 class Login extends React.Component {
@@ -13,26 +10,35 @@ class Login extends React.Component {
         this.state = {
             userId: '',
             userPassword: '',
-            authFlag: false
+            authFlag: false,
+            errorMessage: ''
         }
     } 
 
-    changeHandler = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
+    changeUserIdHandler = (e) => {
+        this.setState({
+            userId: e.nativeEvent.text
+        });
     }
 
-    submitHandler = async (e) => {
+    changeUserPasswordHandler = (e) => {
+        this.setState({
+            userPassword: e.nativeEvent.text
+        });
+    }
+
+    submitHandler = (e) => {
         e.preventDefault();
-        console.log("CURRENT STATE => ", this.state)
+        console.log("CURRENT STATE s=> ", this.state);
 
         // var responseStatus = await axios.post('https://localhost:44312/api/Users/', this.state);
-        axios.post('https://localhost:44312/api/Users/', this.state).then(response => {
+        axios.post('http://92434736.ngrok.io/api/Users', this.state).then(response => {
             console.log('STATUS => ', response.status);
             console.log('User Found!');
-            this.props.navigate
+            this.props.navigation.navigate('Home', {'connectedUserId': response.data.userId});
         }).catch(error => {
             console.log('Error: ', error.response);
-            this.setState({ authFlag: true });
+            this.setState({ authFlag: true, errorMessage: 'Wrong Credentials! Please try again.' });
         });
           
  
@@ -40,20 +46,42 @@ class Login extends React.Component {
     }
 
     render() {
-        const { userId, userPassword, authFlag } = this.state;
-
+        const { userId, userPassword, authFlag, errorMessage } = this.state;
         return (
-            <NavigationContainer>
-                <View>
-                    <Text>Login Page</Text>
-                    <TextField type='text' name='userId' label="Username" value={userId} onChange={this.changeHandler} />
-                    <TextField type='password' name='userPassword' label="Password" value={userPassword} style={{ margin: '20px 0px' }} onChange={this.changeHandler} />
-                    <Button type='submit' title='submit' onPress={this.submitHandler} style={{ marginTop: '40px' }}>Submit</Button>
-                    {authFlag ? <Text>Wrong Credentials! Please try again.</Text> : <Text></Text>}
-                </View>
-            </NavigationContainer>
+            <View >
+                <TextInput type='text' name='userId' label='Username' value={this.state.userId} onChange={this.changeUserIdHandler} style={styles.input} />
+                <TextInput type='password' name='userPassword' label='Password' value={userPassword} onChange={this.changeUserPasswordHandler} style={styles.input}/>
+                <Button type='submit' title='submit' onPress={this.submitHandler} styles={styles.submitButton}>Submit</Button>
+                <Text>{errorMessage}</Text>
+                <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.submitHandler}>
+                    <Text style={styles.submitButtonText}> Submit </Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 }
 
 export default Login;
+
+const styles = StyleSheet.create({
+    container: {
+        paddingTop: 23
+    },
+    input: {
+        margin: 15,
+        height: 40,
+        borderColor: '#7a42f4',
+        borderWidth: 1
+    },
+    submitButton: {
+        backgroundColor: '#7a42f4',
+        padding: 10,
+        margin: 15,
+        height: 40,
+    },
+    submitButtonText: {
+        color: 'white'
+    }
+})
