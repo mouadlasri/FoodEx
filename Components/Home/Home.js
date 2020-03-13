@@ -12,7 +12,7 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: this.props.route.params.connectedUserId,
+            userId: '',
             firstName: '',
             lastName: '',
             profileImage: 'https://ui-avatars.com/api/?name=Mouad+Lasri&rounded=true',
@@ -21,15 +21,22 @@ class Home extends React.Component {
     }
     
     storeUserId = async () => {
-        await AsyncStorage.setItem('connectedUserId', this.state.userId);
-        console.log('ASync Home Storaeg id => ', this.state.userId);
+        // await AsyncStorage.setItem('connectedUserId', this.state.userId);
+        // console.log('ASync Home Storaeg id => ', this.state.userId);
     }
 
-    componentDidUpdate() {
-        console.log(' HOME STATE ID => ', this.props.route.params.connectedUserId);
+    retrieveUserId = async () => {
+        console.log('');
+        var x = await AsyncStorage.getItem('connectedUserId');
+        this.setState({ userId: x });
+
+        axios.get(`https://e3378e38.ngrok.io/api/Users/${this.state.userId}`).then(response => {
+            console.log('Get user data: ', response.data.firstName);
+            this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
+        });
+        console.log(' Async storage in retrieve user id function => ', x);
 
     }
-
     componentDidMount() {  
         // axios.get(`https://localhost:44312/api/Users/${this.state.userId}`).then(response => {
         //     console.log('Get user data: ', response.data);
@@ -39,17 +46,15 @@ class Home extends React.Component {
         // this.setState({
         //     userId: this.props.navigation.state.connectedUserId
         // });
-        
-        this.setState({
-            // Fetch the data passed from the login screen
-            userId: this.props.route.params.connectedUserId
-        });
+
+        this.retrieveUserId();
+       
         // console.log(' HOME STATE ID => ', this.props.route.params.test);
 
-        axios.get(`https://e3378e38.ngrok.io/api/Users/${this.state.userId}`).then(response => {
-            // console.log('Get user data: ', response.data);
-            this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
-        });
+        // axios.get(`https://e3378e38.ngrok.io/api/Users/${this.state.userId}`).then(response => {
+        //     console.log('Get user data: ', response.data.firstName);
+        //     this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
+        // });
     }
     
     render() {
