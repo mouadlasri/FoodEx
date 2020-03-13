@@ -12,7 +12,7 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userId: this.props.navigation.getParam('connectedUserId'),
+            userId: this.props.route.params.connectedUserId,
             firstName: '',
             lastName: '',
             profileImage: 'https://ui-avatars.com/api/?name=Mouad+Lasri&rounded=true',
@@ -25,20 +25,37 @@ class Home extends React.Component {
         console.log('ASync Home Storaeg id => ', this.state.userId);
     }
 
+    componentDidUpdate() {
+        console.log(' HOME STATE ID => ', this.props.route.params.connectedUserId);
+
+    }
+
     componentDidMount() {  
         // axios.get(`https://localhost:44312/api/Users/${this.state.userId}`).then(response => {
         //     console.log('Get user data: ', response.data);
         //     this.setState({ userId: response.data.userId });
         // });
-        axios.get(`https://e3378e38.ngrok.io/api/Users/67887`).then(response => {
+        // this.storeUserId();
+        // this.setState({
+        //     userId: this.props.navigation.state.connectedUserId
+        // });
+        
+        this.setState({
+            // Fetch the data passed from the login screen
+            userId: this.props.route.params.connectedUserId
+        });
+        // console.log(' HOME STATE ID => ', this.props.route.params.test);
+
+        axios.get(`https://e3378e38.ngrok.io/api/Users/${this.state.userId}`).then(response => {
             // console.log('Get user data: ', response.data);
             this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
         });
-        this.storeUserId();
     }
     
     render() {
+        // console.log(' HOME STATE ID => ', this.props.route.params.test);
         return (
+            
             <ScrollView style={{flex: 1}}>
                 <View style={{ flex: 1, backgroundColor: '#1D1D1B'}}>
                 

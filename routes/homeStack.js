@@ -14,8 +14,9 @@ const screens = {
     Login: {
         screen: Login
     },
+   
     RestaurantDetails: {
-        screen: RestaurantDetails
+        screen: RestaurantDetails,
     }
 }
 
