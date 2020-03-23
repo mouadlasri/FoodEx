@@ -29,10 +29,10 @@ class HomeRestaurants extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`https://e3378e38.ngrok.io/api/Restaurants/`).then(response => {
+        axios.get(`https://9d6a7de6.ngrok.io/api/Restaurants/`).then(response => {
             // console.log('Get Restaurant data: ', response.data);
             this.setState({ restaurantData: response.data });
-            // console.log('Restaurant State Data: ', this.state.restaurantData);
+            console.log('Restaurant State Data: ', this.state.restaurantData);
         }).catch(error => { console.log(error) });
 
         // axios.get('http:/')
@@ -55,7 +55,7 @@ class HomeRestaurants extends React.Component {
 
                         <TouchableOpacity style={styles.orderButton}
                             onPress={() => { 
-                                this.props.navigation.navigate('RestaurantDetails', {'restaurantId': item});
+                                this.props.navigation.navigate('RestaurantDetails', {'restaurantId': item.restaurantId, 'restaurantImage': item.imageLink});
                             }} >
                             <Text style={styles.orderButtonText}>Make an order</Text>
                         </TouchableOpacity>

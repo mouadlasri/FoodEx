@@ -4,22 +4,31 @@ import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../Components/Home/Home';
+import Profile from '../Components/User/Profile';
+import RestaurantDetails from '../Components/Order/RestaurantDetails';
 
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-export default class DrawerNavigator extends React.Component {
+ class DrawerNavigator extends React.Component {
     constructor(props) {
         super(props);
     }
-
+    createHomeStack = () => (
+        <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+            <Stack.Screen name="RestaurantDetails" options={{title: 'Place an order'}} component={RestaurantDetails} />
+        </Stack.Navigator>
+    );
+    
     
     render() {
-
+       
         return (
             <Drawer.Navigator>
-                <Drawer.Screen name="Home" component={Home} independent={true}/>
+                <Drawer.Screen name="HomeStack" children={this.createHomeStack} />
+                <Drawer.Screen name="Profile" component={Profile} />
             </Drawer.Navigator>
 
         );
@@ -27,6 +36,7 @@ export default class DrawerNavigator extends React.Component {
    
 }
 
+export default DrawerNavigator;
 const styles = StyleSheet.create({
     container: {
         flex: 1,

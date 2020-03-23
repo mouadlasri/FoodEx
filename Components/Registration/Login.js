@@ -1,10 +1,10 @@
 import React from 'react';
 import { Input } from 'react-native-elements';
-import { StyleSheet, Text, View, Button, TextInput, Image, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Button,  Image, TouchableOpacity, AsyncStorage, ImageBackground } from 'react-native';
 import axios from 'axios';
 import Home from '../Home/Home';
 import DrawerNavigator from '../../routes/drawerNavigator';
-
+import { TextInput } from 'react-native-paper';
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -35,7 +35,7 @@ class Login extends React.Component {
         console.log("CURRENT STATE s=> ", this.state);
 
         // var responseStatus = await axios.post('https://localhost:44312/api/Users/', this.state);
-        axios.post('https://e3378e38.ngrok.io/api/Users', this.state).then(response => {
+        axios.post('https://9d6a7de6.ngrok.io/api/Users', this.state).then(response => {
             console.log('STATUS => ', response.status);
             console.log('User Found!, Id => ', response.data.userId);
             // this.props.navigation.navigate('Home', {'connectedUserId': response.userId});
@@ -62,7 +62,7 @@ class Login extends React.Component {
     storeUserId = async (x) => {
         // console.log('X => ', x);
         this.removeUserId();
-        await AsyncStorage.mergeItem('connectedUserId', x.toString());
+        await AsyncStorage.setItem('connectedUserId', x.toString());
     }
     getUserId = async () => {
         let x = await AsyncStorage.getItem('connectedUserId');
@@ -81,17 +81,29 @@ class Login extends React.Component {
         else {
             return (
 
-                <View >
-                    <TextInput type='text' name='userId' label='Username' value={this.state.userId} onChange={this.changeUserIdHandler} style={styles.input} />
-                    <TextInput type='password' name='userPassword' label='Password' value={this.state.userPassword} onChange={this.changeUserPasswordHandler} style={styles.input} />
-                    <Button type='submit' title='submit' onPress={this.submitHandler} styles={styles.submitButton}>Submit</Button>
-                    <Text>{errorMessage}</Text>
-                    <TouchableOpacity
-                        style={styles.submitButton}
-                        onPress={this.submitHandler}>
-                        <Text style={styles.submitButtonText}> Submit </Text>
-                    </TouchableOpacity>
-                </View>
+                <ImageBackground style={{
+                    backgroundColor: '#ccc',
+                    flex: 1,
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                }}
+                    source={{ uri: 'https://wallpapershome.com/images/pages/pic_v/12115.jpg' }}>
+                    <View style={styles.loginContainer}>
+                        <Text style={{ justifyContent: 'center', textAlign: 'center', fontSize: 20}}>Welcome to</Text>
+                        <Text style={{ justifyContent: 'center' , textAlign: 'center', fontSize: 56, fontFamily: 'Roboto'}}>foodeX</Text>
+                        <TextInput theme={{ colors: { primary: 'black' } }} mode={'flat'} name='userId' label='Username' value={this.state.userId} onChange={this.changeUserIdHandler} style={styles.input}  />
+                        <TextInput theme={{ colors: { primary: 'black' } }} mode={'flat'} type='password' name='userPassword' label='Password' value={this.state.userPassword} onChange={this.changeUserPasswordHandler} style={styles.input} />
+                        <Text>{errorMessage}</Text>
+                        <TouchableOpacity
+                            style={styles.submitButton}
+                            onPress={this.submitHandler}>
+                            <Text style={styles.submitButtonText}> Submit </Text>
+                        </TouchableOpacity>
+                    </View>
+                   
+                </ImageBackground>
             );
         }
        
@@ -106,17 +118,34 @@ const styles = StyleSheet.create({
     },
     input: {
         margin: 15,
-        height: 40,
-        borderColor: '#7a42f4',
-        borderWidth: 1
+        backgroundColor: 'rgba(255,255,255,0)',
+        color: 'black',
+    
     },
     submitButton: {
-        backgroundColor: '#7a42f4',
-        padding: 10,
-        margin: 15,
+        backgroundColor: '#1A5632',
+        textAlign: 'center',
+        justifyContent: 'center',
+        padding: 25,
+        marginLeft: 15,
+        marginRight: 15,
         height: 40,
+        borderRadius: 10
+        
     },
     submitButtonText: {
-        color: 'white'
+        color: 'white',
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontSize: 20,
+        // padding: 10,
+        // marginBottom: 20
+    },
+    loginContainer: {
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        margin: 40,
+        borderRadius: 15,
+        height: '60%',
+        padding: 25
     }
 })
