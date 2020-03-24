@@ -11,9 +11,9 @@ class RestaurantDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            restaurantId: '',
+            restaurantId: null,
             restaurantImage: '',
-            restaurantCategories: []
+            restaurantCategoriesItems: null
         }
     }
    
@@ -25,44 +25,48 @@ class RestaurantDetails extends React.Component {
         });
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
-        await axios.get(`https://9d6a7de6.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+        axios.get(`https://9d6a7de6.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             console.log('Item Category => ', response.data);
-            var ar = []
-            var item;
-            for ( item in response.data) {
-                ar.push(item.categoryId);
-            }
-
-            console.log('AARrRR ', ar);
             
             this.setState({
                 restaurantId: this.props.route.params.restaurantId,
                 restaurantImage: this.props.route.params.restaurantImage,
-                restaurantCategories: ar
+                restaurantCategoriesItems: response.data
             });
             // console.log('Restaurant ID => ', this.state.restaurantId);
 
         }).catch(error => {console.log(error)});
        
 
-        console.log('Image Link => ', this.state.restaurantImage);
-        console.log('Restaurant ID => ', this.state.restaurantId);
+        // console.log('Image Link => ', this.state.restaurantImage);
+        // console.log('Restaurant ID => ', this.state.restaurantId);
     }
 
     render() {
-        var c = []
         
-        var l = this.state.restaurantCategories.map((restaurant) => {
-          
-            console.log('C => ', c.push(restaurant.categoryId))
-        });
-        console.log('CATS => ', c);
+        
+        
+
+
+        if (this.state.restaurantId != null && this.state.restaurantCategoriesItems != null) {
+            var results = this.state.restaurantCategoriesItems.map((restaurant) => {
+                console.log('Restaurant => ', restaurant);
+            });
+            return (
+                <ScrollView>
+                    {results}
+                </ScrollView>
+            )
+        }
+
+        else {
+            return (<Text></Text>)
+        }
         return (
-            <ScrollView>
-                {l}
-            </ScrollView>
+            <View></View>
+           
             // <ScrollView>
             //     <View>
             //         <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 200 }}/>
@@ -125,6 +129,7 @@ class RestaurantDetails extends React.Component {
             //         </View>
             //     </ScrollView>
             // </ScrollView>
+
         );
     }
 }

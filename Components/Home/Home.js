@@ -34,7 +34,7 @@ class Home extends React.Component {
         axios.get(`https://9d6a7de6.ngrok.io/api/Users/${this.state.userId}`).then(response => {
             console.log('Get user data: ', response.data.firstName);
             this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
-        });
+        }).catch(error => console.log(error));
         console.log(' Async storage in retrieve user id function => ', x);
 
     }
@@ -63,7 +63,7 @@ class Home extends React.Component {
         return (
             
             <ScrollView style={{flex: 1}}>
-                <View style={{ flex: 1, backgroundColor: '#1D1D1B'}}>
+                <View style={{ flex: 1, backgroundColor: '#000'}}>
                 
                     <View style={{ flexDirection: 'row', paddingTop: 36, paddingBottom: 16, paddingLeft: 10, justifyContent: 'space-between'}}>
                         <View style={{ justifyContent: 'center' }}>
@@ -85,7 +85,7 @@ class Home extends React.Component {
                 </View>
                 <View style={{ flex: 2, backgroundColor: '' }}>
                     {/* <Text style={styles.orderTitle}>Make an Order</Text> */}
-                    <Text style={styles.orderTitle}>Restaurants</Text>
+                    {/* <Text style={styles.orderTitle}>Restaurants</Text> */}
 
                     <HomeRestaurants navigation={this.props.navigation}/>
                 </View>
@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
         // borderWidth: 0.5,
         // borderColor: '#000',
         alignSelf: 'flex-start',
-        padding: 5
+        padding: 5,
+        fontSize: 20
     },
     
 })
