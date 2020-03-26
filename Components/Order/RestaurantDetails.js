@@ -5,6 +5,7 @@ import NumericInput from 'react-native-numeric-input'
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 class RestaurantDetails extends React.Component {
@@ -28,7 +29,7 @@ class RestaurantDetails extends React.Component {
 
     componentDidMount() {
         console.log('DETAILED RESTAURANT ID => ', this.props.route.params.restaurantId);
-        axios.get(`https://97e78092.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+        axios.get(`https://330d4cee.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             // console.log('Item Category => ', response.data);
             console.log('TOTAL ITEMS => ', response.data.length);
             var results = {}; // m
@@ -74,45 +75,27 @@ class RestaurantDetails extends React.Component {
             return (
                 // <Text>{t.itemName}</Text>
                 <View style={styles.menuItem}>
-                    <View style={{ flex: 2 }}>
-                        <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />
+                    <View style={{ flex: 3, position: 'relative', elevation: 1 }}>
+                        <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />   
                     </View>
                     <View style={{ flex: 1, fontSize: 14 }}>
                         <Text style={{ margin: 10, marginBottom: 0 }}>{foodItem.itemName}</Text>
-                        <Text style={{ marginLeft: 10 }}>Unit price: {foodItem.itemprice} MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
+                        <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{foodItem.itemprice}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
                     </View>
+                    
                     <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ paddingTop: 5, paddingLeft: 10, alignSelf: 'flex-start' }} >
-                            <NumericInput
-                                totalWidth={100}
-                                totalHeight={40}
-                                iconSize={50}
-                                rounded
-                                textColor='#B0228C'
-                                iconStyle={{ color: 'white' }}
-                                rightButtonBackgroundColor='#EA3788'
-                                leftButtonBackgroundColor='#E56B70' />
+                         
                         </View>
                         <View style={{ paddingTop: 5, paddingRight: 10, alignSelf: 'stretch' }}>
-                            <Button
-                                raised
-                                titleStyle={{ fontSize: 13, paddingTop: 4 }}
-                                fontSize={8}
-                                type='solid'
-                                title="Total: 23.20"
-                                titleProps={{ fontSize: 10, color: 'red' }}
-                                icon={
-                                    <Icon
-                                        name="shopping-cart"
-                                        size={20}
-                                        color="white"
-                                        style={{ marginLeft: 5 }}
-                                    />
-                                }
-                                iconRight={true}
-                            />
+                            <TouchableOpacity style={styles.addCartButton}>
+                                <Text style={styles.addCartButtonText}>Add to cart</Text>
+                            </TouchableOpacity>
+                           
                         </View>
+                       
                     </View>
+                    
                 </View>
             )
         });
@@ -126,15 +109,12 @@ class RestaurantDetails extends React.Component {
         if (this.state.restaurantId != null && this.state.restaurantCategoriesItems != null && this.state.totalItems != null) {
             var itemsData = this.state.restaurantCategoriesItems;
             var results = Object.keys(itemsData).map((key) => {
-                // console.log(itemsData[key]);
-                console.log('\n\n==================================================');
-                console.log('KEY => ', key);
-                // console.log('Index => ', index);
                 return (
-                    <ScrollView style={{ flex: 3 }}>
-                        <Text style={{ marginTop: 20, marginLeft: 10, fontSize: 20 }}>Paninis</Text>
-                        <View style={{ height: 300, borderStyle: 'solid', borderColor: 'black' }}>
+                    <ScrollView style={{ flex: 3, marginLeft: 20 }}>
+                        <Text style={{ marginTop: 10, fontSize: 20 }}>{key}</Text>
+                        <View style={{ height: 260, borderStyle: 'solid', borderColor: 'black' }}>
                             <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
+                                {/*For each food category display all its items using the function */}
                                 {this.displayItems(key)}
 
                             </ScrollView>
@@ -147,39 +127,13 @@ class RestaurantDetails extends React.Component {
                         </View>
                     </ScrollView>
                 )
-                // return (
-                //     itemsData[key].map((item) => {
-                //         // console.log('Array Map Item => ', item.itemName);
-                //         var y = <Text>test</Text>
-                //         // console.log('Y => ', y);
-                //         return (
-                //             // <View style={{ height: 100 }} key={item.itemId}><Text >{item.itemName}</Text></View>
-                //             <ScrollView style={{ flex: 3 }}>
-                //                 <Text style={{ marginTop: 20, marginLeft: 10, fontSize: 20 }}>Paninis</Text>
-                //                 <View style={{ height: 300, borderStyle: 'solid', borderColor: 'black' }}>
-                //                     <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
-                //                         {this.displayItems(key)}
-                                       
-                //                     </ScrollView>
-                //                 </View>
-                //                 <View style={{ flex: 2, backgroundColor: '' }}>
-                //                     {/* <Text style={styles.orderTitle}>Make an Order</Text> */}
-                //                     {/* Items of that specific category that changes when a category is chosen */}
-                //                 </View>
-                //                 <View style={{ flex: 3, backgroundColor: '' }}>
-                //                 </View>
-                //             </ScrollView>
-                //         )
-
-                //     })
-                // )
             });
-            // console.log('Resutls > ', results);
+
             return (
                 <ScrollView>
-                          <View>
-                            <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 160 }}/>
-                        </View>
+                    <View>
+                        <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 160 }}/>
+                    </View>
                     {results}
                     {/* {itemsData} */}
                 </ScrollView>
@@ -189,73 +143,6 @@ class RestaurantDetails extends React.Component {
         else {
             return (<Text></Text>);
         }
-        return (
-            <View></View>
-           
-            // <ScrollView>
-            //     <View>
-            //         <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 200 }}/>
-            //     </View>
-                // <ScrollView style={{ flex: 3 }}>
-                //     <Text style={{ marginTop: 20, marginLeft: 10, fontSize: 20 }}>Paninis</Text>
-                //     <View style={{  height: 300, borderStyle: 'solid', borderColor: 'black'}}>
-                //         <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
-                            // <View style={styles.menuItem}>
-                            //     <View style={{flex: 2}}>
-                            //         <Image style={{ flex:1,borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />
-                            //     </View>
-                            //     <View style={{ flex: 1, fontSize: 14}}>
-                            //         <Text style={{ margin: 10, marginBottom: 0 }}>Panini Charcuterie</Text>
-                            //         <Text style={{ marginLeft: 10 }}>Unit price: 23.20 MAD <Text style={{fontSize:10}}>(+2 MAD to go)</Text> </Text>
-                            //     </View>
-                            //     <View style={{ flex: 1, justifyContent: 'center', flexDirection:'row', justifyContent: 'space-between'}}>
-                            //         <View style={{paddingTop: 5, paddingLeft: 10, alignSelf: 'flex-start'}} >
-                            //             <NumericInput
-                            //                 totalWidth={100}
-                            //                 totalHeight={40}
-                            //                 iconSize={50}
-                            //                 rounded
-                            //                 textColor='#B0228C'
-                            //                 iconStyle={{ color: 'white' }}
-                            //                 rightButtonBackgroundColor='#EA3788'
-                            //                 leftButtonBackgroundColor='#E56B70' />
-                            //         </View>
-                            //         <View style={{ paddingTop: 5, paddingRight: 10, alignSelf: 'stretch' }}>
-                            //             <Button
-                            //                 raised
-                            //                 titleStyle={{fontSize: 13, paddingTop: 4}}
-                            //                 fontSize={8}
-                            //                 type='solid'
-                            //                 title="Total: 23.20"
-                            //                 titleProps={{fontSize: 10, color: 'red'}}
-                            //                 icon={
-                            //                     <Icon
-                            //                         name="shopping-cart"
-                            //                         size={20}
-                            //                         color="white"
-                            //                         style={{marginLeft: 5}}
-                            //                     />
-                            //                 }
-                            //                 iconRight={true}
-                            //             />
-                            //         </View>
-                            //     </View>
-                            // </View>
-                            // <View  style={styles.menuItem}>
-
-                            // </View>
-                //         </ScrollView>
-                //     </View>
-                //     <View style={{ flex: 2, backgroundColor: '' }}>
-                //         {/* <Text style={styles.orderTitle}>Make an Order</Text> */}
-                //         {/* Items of that specific category that changes when a category is chosen */}
-                //     </View>
-                //     <View style={{ flex: 3, backgroundColor: '' }}>
-                //     </View>
-                // </ScrollView>
-            // </ScrollView>
-
-        );
     }
 }
 
@@ -263,11 +150,28 @@ class RestaurantDetails extends React.Component {
 export default RestaurantDetails;
 
 const styles = StyleSheet.create({
+    addCartButton: {
+        height: 30,
+        backgroundColor: '#1A5632',
+        alignSelf: 'center',
+        marginTop: 5,
+        justifyContent: 'center',
+        paddingRight: 20,
+        paddingLeft: 20,
+        borderRadius: 30 
+    },
+    addCartButtonText: {
+        fontSize: 12,
+        color: 'white',
+        fontFamily: 'System',
+        fontWeight: 'bold'
+    },  
     menuItem: {
-        width: 260,
-        height: 200,
+        // marginTop: 20,
+        width: 300,
+        height: 240,
         backgroundColor: '#fff',
-        margin: 10,
+        marginRight: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
