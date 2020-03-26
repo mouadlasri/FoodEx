@@ -19,15 +19,16 @@ class HomeRestaurants extends React.Component {
         }
     }
 
-    orderHandler =  () => {
+    orderHandler =  (restaurantId, restaurantLink) => {
         // this.props.navigation.navigate('Login');
-        this.props.navigation.navigate('RestaurantDetails');
+        this.props.navigation.navigate('RestaurantDetails', { 'restaurantId': restaurantId, 'restaurantImage': restaurantLink });
 
-        // console.log(`====================== ORDER HAAAAAAAAAANDLER==================== `);
+        console.log(`====================== ORDER HAAAAAAAAAANDLER==================== `);
+        // console.log('Restaurant Id clickde => ', restaurantId);
     }
 
     componentDidMount() {
-        axios.get(`https://9d6a7de6.ngrok.io/api/Restaurants/`).then(response => {
+        axios.get(`https://97e78092.ngrok.io/api/Restaurants/`).then(response => {
             // console.log('Get Restaurant data: ', response.data);
             this.setState({ restaurantData: response.data });
             // console.log('Restaurant State Data: ', this.state.restaurantData);
@@ -54,7 +55,7 @@ class HomeRestaurants extends React.Component {
     render() {
         
         if (this.state.restaurantData != null) {
-            console.log('STATE of Restaqurant Data => ', this.state.restaurantData);
+            // console.log('STATE of Restaqurant Data => ', this.state.restaurantData);
             const resultRestaurantList = this.state.restaurantData.map((restaurant) => {
                 return (
                     <View style={styles.menuItem} key={restaurant.restaurantId}>
@@ -67,7 +68,7 @@ class HomeRestaurants extends React.Component {
                             <Text style={{ }} style={this.waitingTimeStyle(restaurant.waitingTime)} >{restaurant.waitingTime} </Text>
                         </View>
                         <View style={{ flex: 1, backgroundColor: '#1A5632', justifyContent: 'center', borderBottomRightRadius: 10, borderBottomLeftRadius: 10 }}>
-                            <Icon.Button name="shopping-basket" backgroundColor='#1A5632' style={{ justifyContent: 'center'  }}>
+                            <Icon.Button name="shopping-basket" backgroundColor='#1A5632' style={{ justifyContent: 'center' }} onPress={() => { this.orderHandler(restaurant.restaurantId, restaurant.imageLink) }}>
                                 <Text style={{ textAlign: 'center', color: '#fff' }}>Make an Order!</Text>
                             </Icon.Button>
                         </View>
