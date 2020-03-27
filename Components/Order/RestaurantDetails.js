@@ -1,12 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View,  TextInput, AsyncStorage, Image, ScrollView, ImageBackground } from 'react-native';
 import NumericInput from 'react-native-numeric-input'
-// import { Icon } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import InputSpinner from 'react-native-input-spinner';
+import RestaurantItem from './RestaurantItem';
 
+import * as Font from 'expo-font';
 
 class RestaurantDetails extends React.Component {
     constructor(props) {
@@ -15,7 +17,9 @@ class RestaurantDetails extends React.Component {
             restaurantId: null,
             restaurantImage: '',
             restaurantCategoriesItems: null,
-            totalItems: null
+            totalItems: null,
+            cart: [],
+            number: null
         }
     }
    
@@ -27,25 +31,30 @@ class RestaurantDetails extends React.Component {
         });
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         console.log('DETAILED RESTAURANT ID => ', this.props.route.params.restaurantId);
-        axios.get(`https://330d4cee.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+        // Loading fonts
+        await Font.loadAsync({
+            'PoppinsRegular': require('../../assets/fonts/Poppins-Regular.ttf'),
+            'PoppinsExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
+            'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
+        });
+        axios.get(`https://702a3cd4.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             // console.log('Item Category => ', response.data);
-            console.log('TOTAL ITEMS => ', response.data.length);
+            // console.log('TOTAL ITEMS => ', response.data.length);
             var results = {}; // m
 
             for (var i = 0; i < response.data.length; i++) {
-                // console.log(p[i]);
+
                 var category = response.data[i].categoryName;
-                // console.log('Category => ', category);
+
                 if (results[category] == null) {
-                    // console.log('true');
                     results[category] = [];
                     results[category].push(response.data[i])
 
                 }
                 else if (results[category] != null) {
-                    // console.log('test');
                     results[category].push(response.data[i]);
                 }
             }
@@ -53,19 +62,22 @@ class RestaurantDetails extends React.Component {
             this.setState({
                 restaurantId: this.props.route.params.restaurantId,
                 restaurantImage: this.props.route.params.restaurantImage,
-                // restaurantCategoriesItems: response.data
                 restaurantCategoriesItems: results,
                 totalItems: response.data.length
             });
-            // console.log('Restaurant ID => ', this.state.restaurantId);
 
         }).catch(error => {console.log(error)});
-       
-
-        // console.log('Image Link => ', this.state.restaurantImage);
-        // console.log('Restaurant ID => ', this.state.restaurantId);
     }
 
+    addItemToCart = (itemToAdd, quantity) => {
+        console.log('Parent Item Added to acrt => ', itemToAdd);
+        console.log('Parent Quantity Added to Cart => ', quantity);
+        // console.log('Parent Item added to cart => ', itemToAdd);
+        // console.log('Parent Quantity added to cart => ', this.state.number);
+        this.setState({
+            cart: [...this.state.cart, {itemToAdd, quantity}]
+        });
+    }
    
     displayItems = (key) => {
         var items = this.state.restaurantCategoriesItems;
@@ -74,29 +86,54 @@ class RestaurantDetails extends React.Component {
             // console.log('T => ', t);
             return (
                 // <Text>{t.itemName}</Text>
-                <View style={styles.menuItem}>
-                    <View style={{ flex: 3, position: 'relative', elevation: 1 }}>
-                        <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />   
-                    </View>
-                    <View style={{ flex: 1, fontSize: 14 }}>
-                        <Text style={{ margin: 10, marginBottom: 0 }}>{foodItem.itemName}</Text>
-                        <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{foodItem.itemprice}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
-                    </View>
+
+                <RestaurantItem foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart} />
+
+                // <View style={styles.menuItem} key={foodItem.itemName}>
+                //     <View style={{ position: 'absolute', top: 0, right: 0, backgroundColor: '#F4C430', elevation: 10, zIndex: 10, borderTopRightRadius: 10, borderBottomLeftRadius: 10}}>
+                //         <Text style={{padding: 8}}>~15 min</Text>
+                //     </View>
+                //     <View style={{ flex: 3, position: 'relative', elevation: 1 }}>
+                //         <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />   
+                //     </View>
+                //     <View style={{ flex: 1, fontSize: 14 }}>
+                //         <Text style={{ margin: 10, marginBottom: 0 }}>{foodItem.itemName}</Text>
+                //         <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{foodItem.itemPrice}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
+                //     </View>
                     
-                    <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ paddingTop: 5, paddingLeft: 10, alignSelf: 'flex-start' }} >
-                         
-                        </View>
-                        <View style={{ paddingTop: 5, paddingRight: 10, alignSelf: 'stretch' }}>
-                            <TouchableOpacity style={styles.addCartButton}>
-                                <Text style={styles.addCartButtonText}>Add to cart</Text>
-                            </TouchableOpacity>
+                //     <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
+                //         <View style={{ marginTop: 12, paddingLeft: 10, alignSelf: 'flex-start' }} >
+                //             <InputSpinner
+                //                 max={10}
+                //                 min={0}
+                //                 step={1}
+                //                 colorMax={"#f04048"}
+                //                 // colorMin={"#40c5f4"}
+                //                 value={this.state.number}
+                //                 // buttonFontSize={30}
+                //                 buttonStyle={{ width: 30, height: 30 }}
+                //                 // width={90}
+                //                 inputStyle={{ color: 'black', paddingBottom: 20 }}
+                //                 style={{width: 90}}
+                //                 fontSize={20}
+                //                 onChange={(num) => { this.setState({number: num}) }} />
+                //             {/* <Text style={{ color: 'black'}}>Available</Text> */}
+                //         </View>
+
+                //         <View style={{ paddingTop: 5, paddingRight: 10, alignSelf: 'stretch' }}>
+                //             <TouchableOpacity style={styles.addCartButton} onPress={() => {
+                //                 this.addItemToCart({
+                //                     itemId: foodItem.itemId,
+                //                     itemName: foodItem.itemName
+                //             })}}>
+                //                 <Text style={styles.addCartButtonText}>ADD TO CART</Text>
+                //             </TouchableOpacity>
                            
-                        </View>
+                //         </View>
                        
-                    </View>
+                //     </View>
                     
-                </View>
+                // </View>
             )
         });
 
@@ -110,8 +147,8 @@ class RestaurantDetails extends React.Component {
             var itemsData = this.state.restaurantCategoriesItems;
             var results = Object.keys(itemsData).map((key) => {
                 return (
-                    <ScrollView style={{ flex: 3, marginLeft: 20 }}>
-                        <Text style={{ marginTop: 10, fontSize: 20 }}>{key}</Text>
+                    <ScrollView style={{ flex: 3, marginLeft: 20, marginTop: 16 }} key={key}>
+                        <Text style={{ marginTop: 10, fontSize: 20, fontFamily: 'RobotoBold', textTransform: 'uppercase'}}>{key}</Text>
                         <View style={{ height: 260, borderStyle: 'solid', borderColor: 'black' }}>
                             <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
                                 {/*For each food category display all its items using the function */}
@@ -128,15 +165,32 @@ class RestaurantDetails extends React.Component {
                     </ScrollView>
                 )
             });
+            console.log('Parent Cart => ', this.state.cart);
 
             return (
-                <ScrollView>
-                    <View>
-                        <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 160 }}/>
+                <View>
+                    <ScrollView >
+                        <View>
+                            <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 160 }} />
+                        </View>
+                        {results}
+                        {/* {itemsData} */}
+                       
+                    </ScrollView>
+                    <View style={{ margin: 5, justifyContent: 'center', alignContent: 'center', height: 75, width: 75, backgroundColor: '#F4C430', borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}>
+                        <TouchableOpacity style={{ alignSelf: 'center' }}>
+
+                            <Text style={{ fontSize: 20 }}>
+
+                                {this.state.cart.length}
+                                <Icon name='shopping-cart'  size={20}/>
+
+                            </Text>
+                            
+                            
+                        </TouchableOpacity>
                     </View>
-                    {results}
-                    {/* {itemsData} */}
-                </ScrollView>
+                </View>
             );
         }
 
@@ -163,7 +217,7 @@ const styles = StyleSheet.create({
     addCartButtonText: {
         fontSize: 12,
         color: 'white',
-        fontFamily: 'System',
+        fontFamily: 'RobotoRegular',
         fontWeight: 'bold'
     },  
     menuItem: {
