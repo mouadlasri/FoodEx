@@ -6,7 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../Components/Home/Home';
 import Profile from '../Components/User/Profile';
 import RestaurantDetails from '../Components/Order/RestaurantDetails';
-
+import RestaurantCart from '../Components/Order/RestaurantCart';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -18,7 +18,8 @@ const Drawer = createDrawerNavigator();
     createHomeStack = () => (
         <Stack.Navigator>
             <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
-            <Stack.Screen name="RestaurantDetails" options={{title: 'Place an order'}} component={RestaurantDetails} />
+            <Stack.Screen name="RestaurantDetails" options={{ title: 'GO BACK' }} component={RestaurantDetails} />
+            <Stack.Screen name="RestaurantCart" options={{ title: 'MY CART' }} component={RestaurantCart} />
         </Stack.Navigator>
     );
     

@@ -40,7 +40,8 @@ class RestaurantDetails extends React.Component {
             'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
             'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
         });
-        axios.get(`https://702a3cd4.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+
+        axios.get(`https://3e4d4d94.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             // console.log('Item Category => ', response.data);
             // console.log('TOTAL ITEMS => ', response.data.length);
             var results = {}; // m
@@ -70,15 +71,22 @@ class RestaurantDetails extends React.Component {
     }
 
     addItemToCart = (itemToAdd, quantity) => {
-        console.log('Parent Item Added to acrt => ', itemToAdd);
-        console.log('Parent Quantity Added to Cart => ', quantity);
+        // console.log('Parent Item Added to acrt => ', itemToAdd);
+        // console.log('Parent Quantity Added to Cart => ', quantity);
         // console.log('Parent Item added to cart => ', itemToAdd);
         // console.log('Parent Quantity added to cart => ', this.state.number);
         this.setState({
-            cart: [...this.state.cart, {itemToAdd, quantity}]
+            cart: [...this.state.cart, {'itemId': itemToAdd.itemId, 'itemName': itemToAdd.itemName, 'itemPrice': itemToAdd.itemPrice, quantity}]
         });
     }
    
+
+    goToShoppingCart = () => {
+        console.log('Parent cart content: ', this.state.cart);
+        this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart });
+    }
+
+
     displayItems = (key) => {
         var items = this.state.restaurantCategoriesItems;
 
@@ -165,7 +173,7 @@ class RestaurantDetails extends React.Component {
                     </ScrollView>
                 )
             });
-            console.log('Parent Cart => ', this.state.cart);
+            // console.log('Parent Cart => ', this.state.cart);
 
             return (
                 <View>
@@ -178,12 +186,12 @@ class RestaurantDetails extends React.Component {
                        
                     </ScrollView>
                     <View style={{ margin: 5, justifyContent: 'center', alignContent: 'center', height: 75, width: 75, backgroundColor: '#F4C430', borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}>
-                        <TouchableOpacity style={{ alignSelf: 'center' }}>
+                        <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => {this.goToShoppingCart()}}>
 
                             <Text style={{ fontSize: 20 }}>
 
                                 {this.state.cart.length}
-                                <Icon name='shopping-cart'  size={20}/>
+                                <Icon name='shopping-cart' size={20}/>
 
                             </Text>
                             

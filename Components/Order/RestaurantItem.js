@@ -13,7 +13,7 @@ class RestaurantItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            number: null
+            number: 1
         }
     }
 
@@ -32,7 +32,7 @@ class RestaurantItem extends React.Component {
             'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
         });
 
-        console.log('Cart from parent => ', this.props.cart);
+        // console.log('Cart from parent => ', this.props.cart);
        
     }
 
@@ -40,6 +40,7 @@ class RestaurantItem extends React.Component {
         console.log('Item added to cart => ', itemToAdd);
         console.log('Quantity added to cart => ', this.state.number);
         this.props.cart.push(itemToAdd);
+        console.log('Cart Props => ', this.props.cart);
         // this.setState({
         //     cart: [...this.state.cart, itemToAdd]
         // });
@@ -57,14 +58,14 @@ class RestaurantItem extends React.Component {
                 </View>
                 <View style={{ flex: 1, fontSize: 14 }}>
                     <Text style={{ margin: 10, marginBottom: 0 }}>{this.props.foodItem.itemName}</Text>
-                    <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{this.props.foodItem.itemPrice}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
+                    <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{this.props.foodItem.itemPrice.toFixed(2)}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View style={{ marginTop: 12, paddingLeft: 10, alignSelf: 'flex-start' }} >
+                    <View style={{ marginTop: 10, paddingLeft: 10, alignSelf: 'flex-start' }} >
                         <InputSpinner
                             max={10}
-                            min={0}
+                            min={1}
                             step={1}
                             colorMax={"#f04048"}
                             // colorMin={"#40c5f4"}
@@ -85,7 +86,8 @@ class RestaurantItem extends React.Component {
                                 this.props.addItemToCart(
                                     {
                                         itemId: this.props.foodItem.itemId,
-                                        itemName: this.props.foodItem.itemName
+                                        itemName: this.props.foodItem.itemName,
+                                        itemPrice: this.props.foodItem.itemPrice
                                     },
                                     this.state.number
                                 )
