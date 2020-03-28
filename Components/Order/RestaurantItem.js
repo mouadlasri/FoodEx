@@ -87,7 +87,8 @@ class RestaurantItem extends React.Component {
                                     {
                                         itemId: this.props.foodItem.itemId,
                                         itemName: this.props.foodItem.itemName,
-                                        itemPrice: this.props.foodItem.itemPrice
+                                        itemPrice: this.props.foodItem.itemPrice,
+                                        itemImage: this.props.foodItem.itemImage
                                     },
                                     this.state.number
                                 )

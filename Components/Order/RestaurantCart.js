@@ -48,10 +48,10 @@ class RestaurantCart extends React.Component {
                 <View>
                     {
                         this.state.cart.map((cartItem, index) => (
-                            <View style={styles.cartItemContainer}>
+                            <View style={styles.cartItemContainer} key={index}>
                                 {/* Avatar */}
                                 <View style={styles.avatarContainer} >
-                                    <Image style={{ width: 80, height: 80, borderRadius: 100  }} resizeMode='cover' source={{ uri: 'https://ui-avatars.com/api/?name=Mouad+Lasri' }} />
+                                    <Image style={{ width: 80, height: 80, borderRadius: 100  }} resizeMode='cover' source={{ uri: cartItem.itemImage }} />
                                 </View>
                                 
                                 <View style={{ marginTop: 20, alignSelf: 'flex-start', width: 230 }}>

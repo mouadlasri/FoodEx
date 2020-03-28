@@ -76,7 +76,7 @@ class RestaurantDetails extends React.Component {
         // console.log('Parent Item added to cart => ', itemToAdd);
         // console.log('Parent Quantity added to cart => ', this.state.number);
         this.setState({
-            cart: [...this.state.cart, {'itemId': itemToAdd.itemId, 'itemName': itemToAdd.itemName, 'itemPrice': itemToAdd.itemPrice, quantity}]
+            cart: [...this.state.cart, {'itemId': itemToAdd.itemId, 'itemName': itemToAdd.itemName, 'itemPrice': itemToAdd.itemPrice, 'itemImage': itemToAdd.itemImage, quantity}]
         });
     }
    
@@ -92,12 +92,11 @@ class RestaurantDetails extends React.Component {
     displayItems = (key) => {
         var items = this.state.restaurantCategoriesItems;
 
-        var results = items[key].map((foodItem) => {
+        var results = items[key].map((foodItem, index) => {
             // console.log('T => ', t);
             return (
                 // <Text>{t.itemName}</Text>
-                <RestaurantItem foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart} />
-
+                <RestaurantItem key={index} foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart} />
             )
         });
 
