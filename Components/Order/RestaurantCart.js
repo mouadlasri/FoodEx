@@ -16,7 +16,8 @@ class RestaurantCart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cart: null
+            cart: null,
+            total: null
         }
     }
 
@@ -29,49 +30,134 @@ class RestaurantCart extends React.Component {
             'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
             'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
         });
-        console.log('Restaurant Cart Component cart => ', this.state.cart);
-
+      
         this.setState({
-            cart: this.props.route.params.cart
-        })
+            cart: this.props.route.params.cart,
+            total: null
+        });
+
+        const total = this.countCartTotal();
+        this.setState({
+            total: total
+        });
 
     }
 
+    countCartTotal = () => {
+        // Count the total of all items * their quantities using reduce function, starting value is = 0
+        const cartAmountTotal = this.state.cart.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue.itemPrice * currentValue.quantity;
+        }, 0);
+        
+        return cartAmountTotal;
+
+        this.setState({
+            total: cartAmountTotal
+        });
+    }
+
+    deleteItemFromCart =  async (itemIndex) => {
+        console.log('Index of item to delete: ', itemIndex);
+      
+        var newCart = await this.state.cart.filter((value, index, arr) => {
+            return index != itemIndex
+        });
+
+        console.log('New Cart => ', newCart);
+        
+        // Modify the state of cart
+        this.setState({
+            cart: newCart
+        });
+
+        // Count the cart total again
+        var newTotal = await this.countCartTotal();
+        
+        // modify the state of total
+        this.setState({
+            total: newTotal
+        });
+
+        console.log('New Total State => ', this.state.total);
+
+        this.props.route.params.deleteItem(itemIndex);
+    }
     
     render() {
-        if (this.state.cart != null) {
+        if (this.state.cart != null && this.state.total != null) {
             this.state.cart.map((l, i) => {
-                console.log('Cart State => ', l);
+                // console.log('Cart State => ', l);
             });
 
             return (
-                <View>
-                    {
-                        this.state.cart.map((cartItem, index) => (
-                            <View style={styles.cartItemContainer} key={index}>
-                                {/* Avatar */}
-                                <View style={styles.avatarContainer} >
-                                    <Image style={{ width: 80, height: 80, borderRadius: 100  }} resizeMode='cover' source={{ uri: cartItem.itemImage }} />
-                                </View>
-                                
-                                <View style={{ marginTop: 20, alignSelf: 'flex-start', width: 230 }}>
-                                    <View style={styles.deleteItemButton}>
-                                        <TouchableOpacity style={{ alignItems: 'center'}}>
-                                            <Icon name='trash' size={30} color={'#c20000'}></Icon>
-                                        </TouchableOpacity>
+                <ImageBackground style={{
+                    backgroundColor: 'white',
+                    flex: 1,
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%'
+                }}  >
+                    <ScrollView style={{ height: '50%'}}>
+                        {
+                            this.state.cart.map((cartItem, index) => (
+                                <View style={styles.cartItemContainer} key={index}>
+                                    {/* Avatar */}
+                                    <View style={styles.avatarContainer} >
+                                        <Image style={{ width: 80, height: 80, borderRadius: 100 }} resizeMode='cover' source={{ uri: cartItem.itemImage }} />
                                     </View>
-                                    
+
+                                    {/* Top Banner */}
+                                    <View style={{ height: 12, backgroundColor: '#1A5632', paddingLeft: 0, borderTopRightRadius: 8, borderTopLeftRadius: 8 }}>
+
+                                    </View>
+                                    {/* Main Item Container */}
+                                    <View style={{ marginTop: 10, alignSelf: 'flex-start', width: 260, paddingLeft: 55 }}>
+                                        <View style={styles.deleteItemButton}>
+                                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.deleteItemFromCart(index)}>
+                                                <Icon name='trash' size={30} color={'#c20000'}></Icon>
+                                            </TouchableOpacity>
+                                        </View>
                                         <Text style={{ fontSize: 20, marginBottom: 3 }}>{cartItem.itemName}</Text>
                                         <Text style={{ marginBottom: 3 }}>Quantity: {cartItem.quantity}</Text>
-                                       
                                         <Text>Price: {parseFloat(cartItem.itemPrice).toFixed(2)} x {cartItem.quantity} = <Text style={{ fontWeight: 'bold', color: '#1A5632' }}>{parseFloat((cartItem.itemPrice) * parseFloat(cartItem.quantity)).toFixed(2)}</Text></Text>
                                     </View>
-                               
-                                
+
+                                    {/* Bottom Banner */}
+                                    <View style={{ marginTop: 14, height: 10, backgroundColor: '#1A5632', paddingLeft: 0, borderBottomRightRadius: 8, borderBottomLeftRadius: 8 }}>
+
+                                    </View>
+
+                                </View>
+                            ))
+                        }
+                    </ScrollView>
+
+                    <View style={{flex: 1, backgroundColor: 'white', height: '60%', paddingBottom: 50}}>
+                        <View style={{marginLeft: 30, marginRight: 30}} >
+                            <Text>Order Summary</Text>
+
+                            {
+                                this.state.cart.map((cartItem, index) => (
+                                    <View style={{  flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text>{cartItem.itemName} x {cartItem.quantity}</Text>
+                                        <Text>{parseFloat((cartItem.itemPrice) * parseFloat(cartItem.quantity)).toFixed(2) }</Text>
+                                    </View>
+                                ))
+                            }
+                            <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between' }}>
+                                <Text style={{fontSize: 26, fontWeight: 'bold'}}>Total:</Text>
+                                <Text style={{fontSize: 26}}>{parseFloat(this.state.total).toFixed(2)}</Text>
                             </View>
-                        ))
-                    }
-                </View>
+                            <TouchableOpacity style={styles.placeOrderButton}>
+                                    <Icon name='shopping-cart' color={'white'} size={25} style={{ marginRight: 7 }}/>
+                                    <Text style={styles.placeOrderText}>Place Order</Text>
+                                    {/* Place Order */}
+                            </TouchableOpacity>
+                           
+                        </View>
+                    </View>
+                </ImageBackground>
+               
             );
         }
       
@@ -94,7 +180,9 @@ const styles = StyleSheet.create({
         height: 120,
         margin: 30,
         marginLeft: 75,
-        paddingLeft: 55,
+        marginBottom: 0,
+        marginTop: 14,
+        // paddingLeft: 55,
         borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: {
@@ -129,9 +217,32 @@ const styles = StyleSheet.create({
         width: 46,
         height: 46,
         top: 16,
-        right: 0,
+        right: -30,
         justifyContent: 'center',
         borderRadius: 100,
+    },
+    placeOrderButton: {
+        height: 40,
+        backgroundColor: '#1A5632',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop: 5,
+        paddingRight: 20,
+        paddingLeft: 20,
+        borderRadius: 30,
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    placeOrderText: {
+        fontSize: 16,
+        color: 'white',
+        fontFamily: 'RobotoRegular',
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        textTransform: 'uppercase',
+        letterSpacing: 2,
+        paddingLeft: 7
     }
 
 });

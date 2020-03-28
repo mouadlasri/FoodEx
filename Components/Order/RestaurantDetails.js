@@ -78,13 +78,39 @@ class RestaurantDetails extends React.Component {
         this.setState({
             cart: [...this.state.cart, {'itemId': itemToAdd.itemId, 'itemName': itemToAdd.itemName, 'itemPrice': itemToAdd.itemPrice, 'itemImage': itemToAdd.itemImage, quantity}]
         });
+
+    }
+
+    removeItemFromCart = (index) => {
+        // var updatedCart = this.state.cart.splice(index, 1);
+        // console.log('Delete Cart Item Number => ', index);
+        // this.setState({
+        //     cart: updatedCart
+        // });
     }
    
 
+    deleteItem(indexToDelete) {
+        console.log('Returned Data in Parent => ', indexToDelete);
+
+
+        var newCart = this.state.cart.filter((value, index, arr) => {
+            return index != indexToDelete
+        });
+
+        console.log(this.state.cart.length);
+
+        this.setState({
+            cart: newCart
+        });
+
+    }
+
     goToShoppingCart = () => {
-        console.log('Parent cart content: ', this.state.cart);
+        // console.log('Parent cart content: ', this.state.cart);
+        // return (<View style={{height: '100%', position:'absolute', backgroundColor: 'red', elevation: 10, width: '100%'}}></View>)
         if (this.state.cart.length > 0) {
-            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart });
+            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart, 'deleteItem': this.deleteItem.bind(this) });
         }
     }
 
@@ -96,13 +122,13 @@ class RestaurantDetails extends React.Component {
             // console.log('T => ', t);
             return (
                 // <Text>{t.itemName}</Text>
-                <RestaurantItem key={index} foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart} />
+                <RestaurantItem key={index} foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart}  />
             )
         });
 
         return results;
-        
     }
+
 
     render() {
         
@@ -140,17 +166,15 @@ class RestaurantDetails extends React.Component {
                         {/* {itemsData} */}
                        
                     </ScrollView>
+
+                    {/* Shopping Cart Button to send user to the Shopping Cart screen */}
                     <View style={{ margin: 5, justifyContent: 'center', alignContent: 'center', height: 75, width: 75, backgroundColor: '#F4C430', borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}>
                         <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => {this.goToShoppingCart()}}>
 
                             <Text style={{ fontSize: 20 }}>
-
                                 {this.state.cart.length}
                                 <Icon name='shopping-cart' size={20}/>
-
                             </Text>
-                            
-                            
                         </TouchableOpacity>
                     </View>
                 </View>
