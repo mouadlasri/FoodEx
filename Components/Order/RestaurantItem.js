@@ -51,14 +51,14 @@ class RestaurantItem extends React.Component {
         return (
             <View style={styles.menuItem} key={this.props.foodItem.itemId}>
                 <View style={{ position: 'absolute', top: 0, right: 0, backgroundColor: '#F4C430', elevation: 10, zIndex: 10, borderTopRightRadius: 10, borderBottomLeftRadius: 10 }}>
-                    <Text style={{ padding: 8 }}>~15 min</Text>
+                    <Text style={{ padding: 8 }}>~ {this.props.foodItem.itemWaitingTime} min</Text>
                 </View>
                 <View style={{ flex: 3, position: 'relative', elevation: 1 }}>
-                    <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />
+                    <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: this.props.foodItem.itemImage }} />
                 </View>
                 <View style={{ flex: 1, fontSize: 14 }}>
                     <Text style={{ margin: 10, marginBottom: 0 }}>{this.props.foodItem.itemName}</Text>
-                    <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{this.props.foodItem.itemPrice.toFixed(2)}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
+                    <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 1)', fontFamily: 'Roboto' }}><Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold', fontSize: 14 }}>{this.props.foodItem.itemPrice.toFixed(2)}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>

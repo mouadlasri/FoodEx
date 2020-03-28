@@ -75,7 +75,6 @@ class RestaurantCart extends React.Component {
             );
         }
       
-        
         return (
             <View>
                 <Text>Your cart is empty.</Text>

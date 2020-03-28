@@ -83,7 +83,9 @@ class RestaurantDetails extends React.Component {
 
     goToShoppingCart = () => {
         console.log('Parent cart content: ', this.state.cart);
-        this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart });
+        if (this.state.cart.length > 0) {
+            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart });
+        }
     }
 
 
@@ -94,54 +96,8 @@ class RestaurantDetails extends React.Component {
             // console.log('T => ', t);
             return (
                 // <Text>{t.itemName}</Text>
-
                 <RestaurantItem foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart} />
 
-                // <View style={styles.menuItem} key={foodItem.itemName}>
-                //     <View style={{ position: 'absolute', top: 0, right: 0, backgroundColor: '#F4C430', elevation: 10, zIndex: 10, borderTopRightRadius: 10, borderBottomLeftRadius: 10}}>
-                //         <Text style={{padding: 8}}>~15 min</Text>
-                //     </View>
-                //     <View style={{ flex: 3, position: 'relative', elevation: 1 }}>
-                //         <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2013/4/2/0/GH0504H_rib-eye-steak-panini-recipe_s4x3.jpg.rend.hgtvcom.616.462.suffix/1371616898935.jpeg' }} />   
-                //     </View>
-                //     <View style={{ flex: 1, fontSize: 14 }}>
-                //         <Text style={{ margin: 10, marginBottom: 0 }}>{foodItem.itemName}</Text>
-                //         <Text style={{ marginLeft: 10, fontSize: 12, color: 'rgba(0, 0, 0, 0.5)', fontFamily: 'Roboto' }}>Unit price: <Text style={{ color: 'rgba(26,86,50,1)', fontWeight: 'bold' }}>{foodItem.itemPrice}</Text> MAD <Text style={{ fontSize: 10 }}>(+2 MAD to go)</Text> </Text>
-                //     </View>
-                    
-                //     <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
-                //         <View style={{ marginTop: 12, paddingLeft: 10, alignSelf: 'flex-start' }} >
-                //             <InputSpinner
-                //                 max={10}
-                //                 min={0}
-                //                 step={1}
-                //                 colorMax={"#f04048"}
-                //                 // colorMin={"#40c5f4"}
-                //                 value={this.state.number}
-                //                 // buttonFontSize={30}
-                //                 buttonStyle={{ width: 30, height: 30 }}
-                //                 // width={90}
-                //                 inputStyle={{ color: 'black', paddingBottom: 20 }}
-                //                 style={{width: 90}}
-                //                 fontSize={20}
-                //                 onChange={(num) => { this.setState({number: num}) }} />
-                //             {/* <Text style={{ color: 'black'}}>Available</Text> */}
-                //         </View>
-
-                //         <View style={{ paddingTop: 5, paddingRight: 10, alignSelf: 'stretch' }}>
-                //             <TouchableOpacity style={styles.addCartButton} onPress={() => {
-                //                 this.addItemToCart({
-                //                     itemId: foodItem.itemId,
-                //                     itemName: foodItem.itemName
-                //             })}}>
-                //                 <Text style={styles.addCartButtonText}>ADD TO CART</Text>
-                //             </TouchableOpacity>
-                           
-                //         </View>
-                       
-                //     </View>
-                    
-                // </View>
             )
         });
 

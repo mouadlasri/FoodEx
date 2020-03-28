@@ -18,8 +18,8 @@ const Drawer = createDrawerNavigator();
     createHomeStack = () => (
         <Stack.Navigator>
             <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
-            <Stack.Screen name="RestaurantDetails" options={{ title: 'GO BACK' }} component={RestaurantDetails} />
-            <Stack.Screen name="RestaurantCart" options={{ title: 'MY CART' }} component={RestaurantCart} />
+            <Stack.Screen name="RestaurantDetails" options={{ title: '' }} component={RestaurantDetails} />
+            <Stack.Screen name="RestaurantCart" options={{ title: '' }} component={RestaurantCart} />
         </Stack.Navigator>
     );
     
