@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View,  TextInput, AsyncStorage, Image, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TextInput, AsyncStorage, Image, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 import NumericInput from 'react-native-numeric-input'
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,7 +19,8 @@ class RestaurantDetails extends React.Component {
             restaurantCategoriesItems: null,
             totalItems: null,
             cart: [],
-            number: null
+            number: null,
+            loading: true
         }
     }
    
@@ -41,11 +42,11 @@ class RestaurantDetails extends React.Component {
             'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
         });
 
-        axios.get(`https://3e4d4d94.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
-            // console.log('Item Category => ', response.data);
-            // console.log('TOTAL ITEMS => ', response.data.length);
-            var results = {}; // m
+        axios.get(`https://79950a69.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+            var results = {};
 
+            // this loop constructs a dictionary based on the item category (ie: 'Paninis': [items])
+            // the API does not return nested objects therefore the dictionary is built in client-side
             for (var i = 0; i < response.data.length; i++) {
 
                 var category = response.data[i].categoryName;
@@ -60,11 +61,13 @@ class RestaurantDetails extends React.Component {
                 }
             }
 
+            // Update the state with the appropriate data
             this.setState({
                 restaurantId: this.props.route.params.restaurantId,
                 restaurantImage: this.props.route.params.restaurantImage,
                 restaurantCategoriesItems: results,
-                totalItems: response.data.length
+                totalItems: response.data.length,
+                loading: false
             });
 
         }).catch(error => {console.log(error)});
@@ -80,15 +83,6 @@ class RestaurantDetails extends React.Component {
         });
 
     }
-
-    removeItemFromCart = (index) => {
-        // var updatedCart = this.state.cart.splice(index, 1);
-        // console.log('Delete Cart Item Number => ', index);
-        // this.setState({
-        //     cart: updatedCart
-        // });
-    }
-   
 
     deleteItem(indexToDelete) {
         console.log('Returned Data in Parent => ', indexToDelete);
@@ -108,20 +102,18 @@ class RestaurantDetails extends React.Component {
 
     goToShoppingCart = () => {
         // console.log('Parent cart content: ', this.state.cart);
-        // return (<View style={{height: '100%', position:'absolute', backgroundColor: 'red', elevation: 10, width: '100%'}}></View>)
         if (this.state.cart.length > 0) {
-            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart, 'deleteItem': this.deleteItem.bind(this) });
+            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart, 'deleteItem': this.deleteItem.bind(this), 'restaurantId': this.state.restaurantId });
         }
     }
 
 
     displayItems = (key) => {
         var items = this.state.restaurantCategoriesItems;
-
+        
+        // For each category of items, display all items of that category 
         var results = items[key].map((foodItem, index) => {
-            // console.log('T => ', t);
             return (
-                // <Text>{t.itemName}</Text>
                 <RestaurantItem key={index} foodItem={foodItem} cart={this.state.cart} addItemToCart={this.addItemToCart}  />
             )
         });
@@ -131,59 +123,69 @@ class RestaurantDetails extends React.Component {
 
 
     render() {
-        
-        if (this.state.restaurantId != null && this.state.restaurantCategoriesItems != null && this.state.totalItems != null) {
-            var itemsData = this.state.restaurantCategoriesItems;
-            var results = Object.keys(itemsData).map((key) => {
-                return (
-                    <ScrollView style={{ flex: 3, marginLeft: 20, marginTop: 16 }} key={key}>
-                        <Text style={{ marginTop: 10, fontSize: 20, fontFamily: 'RobotoBold', textTransform: 'uppercase'}}>{key}</Text>
-                        <View style={{ height: 260, borderStyle: 'solid', borderColor: 'black' }}>
-                            <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
-                                {/*For each food category display all its items using the function */}
-                                {this.displayItems(key)}
-
-                            </ScrollView>
-                        </View>
-                        <View style={{ flex: 2, backgroundColor: '' }}>
-                            {/* <Text style={styles.orderTitle}>Make an Order</Text> */}
-                            {/* Items of that specific category that changes when a category is chosen */}
-                        </View>
-                        <View style={{ flex: 3, backgroundColor: '' }}>
-                        </View>
-                    </ScrollView>
-                )
-            });
-            // console.log('Parent Cart => ', this.state.cart);
-
+        if (this.state.loading) {
             return (
-                <View>
-                    <ScrollView >
-                        <View>
-                            <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 160 }} />
-                        </View>
-                        {results}
-                        {/* {itemsData} */}
-                       
-                    </ScrollView>
-
-                    {/* Shopping Cart Button to send user to the Shopping Cart screen */}
-                    <View style={{ margin: 5, justifyContent: 'center', alignContent: 'center', height: 75, width: 75, backgroundColor: '#F4C430', borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}>
-                        <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => {this.goToShoppingCart()}}>
-
-                            <Text style={{ fontSize: 20 }}>
-                                {this.state.cart.length}
-                                <Icon name='shopping-cart' size={20}/>
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                    <ActivityIndicator size="large" color="#1A5632" />
+                    <Text style={{ color:"#1A5632"}}>Loading...</Text>
                 </View>
-            );
+            )
         }
-
         else {
-            return (<Text></Text>);
+            if (this.state.restaurantId != null && this.state.restaurantCategoriesItems != null && this.state.totalItems != null) {
+                var itemsData = this.state.restaurantCategoriesItems;
+                var results = Object.keys(itemsData).map((key) => {
+                    return (
+                        <ScrollView style={{ flex: 3, marginLeft: 20, marginTop: 16 }} key={key}>
+                            <Text style={{ marginTop: 10, fontSize: 20, fontFamily: 'RobotoBold', textTransform: 'uppercase' }}>{key}</Text>
+                            <View style={{ height: 260, borderStyle: 'solid', borderColor: 'black' }}>
+                                <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
+                                    {/*For each food category display all its items using the function */}
+                                    {this.displayItems(key)}
+
+                                </ScrollView>
+                            </View>
+                            <View style={{ flex: 2, backgroundColor: '' }}>
+                                {/* <Text style={styles.orderTitle}>Make an Order</Text> */}
+                                {/* Items of that specific category that changes when a category is chosen */}
+                            </View>
+                            <View style={{ flex: 3, backgroundColor: '' }}>
+                            </View>
+                        </ScrollView>
+                    )
+                });
+                // console.log('Parent Cart => ', this.state.cart);
+
+                return (
+                    <View>
+                        <ScrollView >
+                            <View>
+                                <Image source={{ uri: this.props.route.params.restaurantImage }} style={{ height: 160 }} />
+                            </View>
+                            {results}
+                            {/* {itemsData} */}
+
+                        </ScrollView>
+
+                        {/* Shopping Cart Button to send user to the Shopping Cart screen */}
+                        <View style={{ margin: 5, justifyContent: 'center', alignContent: 'center', height: 75, width: 75, backgroundColor: '#F4C430', borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}>
+                            <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => { this.goToShoppingCart() }}>
+
+                                <Text style={{ fontSize: 20 }}>
+                                    {this.state.cart.length}
+                                    <Icon name='shopping-cart' size={20} />
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                );
+            }
+
+            else {
+                return (<Text></Text>);
+            }
         }
+       
     }
 }
 

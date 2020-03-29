@@ -17,7 +17,9 @@ class RestaurantCart extends React.Component {
         super(props);
         this.state = {
             cart: null,
-            total: null
+            total: null,
+            connectedUserId: null,
+            restaurantId: null
         }
     }
 
@@ -30,13 +32,23 @@ class RestaurantCart extends React.Component {
             'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
             'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
         });
-      
+        
+        var userId = await AsyncStorage.getItem('connectedUserId');
+        console.log('USER ID ====> ', userId);
+        
         this.setState({
-            cart: this.props.route.params.cart,
-            total: null
+            cart: this.props.route.params.cart, // accessing the cart sent from RestaurantDetails Component
+            total: null,
+            connectedUserId: userId,
+            restaurantId: this.props.route.params.restaurantId
         });
 
+        console.log('State user ID : ', this.state.connectedUserId);
+
+        // Counting the total amount of all items in the cart
         const total = this.countCartTotal();
+
+        // Updating the cart again with the right total
         this.setState({
             total: total
         });
@@ -50,15 +62,14 @@ class RestaurantCart extends React.Component {
         }, 0);
         
         return cartAmountTotal;
-
-        this.setState({
-            total: cartAmountTotal
-        });
     }
 
+
+    // Function to delete an item from the cart when user removes it from his order
     deleteItemFromCart =  async (itemIndex) => {
         console.log('Index of item to delete: ', itemIndex);
       
+        // Filter the existing cart on the item of the item that needs to be deleted
         var newCart = await this.state.cart.filter((value, index, arr) => {
             return index != itemIndex
         });
@@ -82,7 +93,25 @@ class RestaurantCart extends React.Component {
 
         this.props.route.params.deleteItem(itemIndex);
     }
-    
+     
+    placeOrder = () => {
+        // construct object to send as POST request to the API
+        // console.log('Connected User ID => ', this.state.connectedUserId);
+        var orderDetails = {
+            ItemsList: this.state.cart,
+            UserId: this.state.connectedUserId,
+            RestaurantId: this.state.restaurantId
+        }
+
+        axios.post('https://79950a69.ngrok.io/api/Restaurants/order', orderDetails).then(response => {
+            console.log('STATUS => ', response.status);
+            console.log('Data => ', response.data);
+            
+        }).catch(error => {
+            console.log('Error: ', error.response);
+        });
+    }
+
     render() {
         if (this.state.cart != null && this.state.total != null) {
             this.state.cart.map((l, i) => {
@@ -111,7 +140,7 @@ class RestaurantCart extends React.Component {
 
                                     </View>
                                     {/* Main Item Container */}
-                                    <View style={{ marginTop: 10, alignSelf: 'flex-start', width: 260, paddingLeft: 55 }}>
+                                    <View style={{ marginTop: 10, alignSelf: 'flex-start', width: '80%', paddingLeft: 55 }}>
                                         <View style={styles.deleteItemButton}>
                                             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.deleteItemFromCart(index)}>
                                                 <Icon name='trash' size={30} color={'#c20000'}></Icon>
@@ -138,7 +167,7 @@ class RestaurantCart extends React.Component {
 
                             {
                                 this.state.cart.map((cartItem, index) => (
-                                    <View style={{  flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <View style={{  flexDirection: 'row', justifyContent: 'space-between' }} key={index}>
                                         <Text>{cartItem.itemName} x {cartItem.quantity}</Text>
                                         <Text>{parseFloat((cartItem.itemPrice) * parseFloat(cartItem.quantity)).toFixed(2) }</Text>
                                     </View>
@@ -148,7 +177,7 @@ class RestaurantCart extends React.Component {
                                 <Text style={{fontSize: 26, fontWeight: 'bold'}}>Total:</Text>
                                 <Text style={{fontSize: 26}}>{parseFloat(this.state.total).toFixed(2)}</Text>
                             </View>
-                            <TouchableOpacity style={styles.placeOrderButton}>
+                            <TouchableOpacity style={styles.placeOrderButton} onPress={() => this.placeOrder()}>
                                     <Icon name='shopping-cart' color={'white'} size={25} style={{ marginRight: 7 }}/>
                                     <Text style={styles.placeOrderText}>Place Order</Text>
                                     {/* Place Order */}

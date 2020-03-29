@@ -54,7 +54,7 @@ class RestaurantItem extends React.Component {
                     <Text style={{ padding: 8 }}>~ {this.props.foodItem.itemWaitingTime} min</Text>
                 </View>
                 <View style={{ flex: 3, position: 'relative', elevation: 1 }}>
-                    <Image style={{ flex: 1, borderTopRightRadius: 20, borderTopLeftRadius: 20 }} resizeMode='cover' source={{ uri: this.props.foodItem.itemImage }} />
+                    <Image style={{ flex: 1, width: '100%', height: '100%' ,borderTopRightRadius: 20, borderTopLeftRadius: 10 }} resizeMode='cover' source={{ uri: this.props.foodItem.itemImage }} />
                 </View>
                 <View style={{ flex: 1, fontSize: 14 }}>
                     <Text style={{ margin: 10, marginBottom: 0 }}>{this.props.foodItem.itemName}</Text>
@@ -133,13 +133,13 @@ const styles = StyleSheet.create({
         height: 240,
         backgroundColor: '#fff',
         marginRight: 30,
-        shadowColor: "#000",
+        shadowColor: "black",
         shadowOffset: {
-            width: 0,
-            height: 2,
+            width: 5,
+            height: 5,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowOpacity: 1.25,
+        shadowRadius: 10.84,
         elevation: 5,
         borderRadius: 10,
         marginTop: 16
