@@ -100,10 +100,18 @@ class RestaurantDetails extends React.Component {
 
     }
 
+    // function to clean the current cart of user (after Order is confirmed in the RestaurantComponent)
+    // this function is called from RestaurantCart.js
+    cleanCart() {
+        this.setState({
+            cart: []
+        });
+    }
+
     goToShoppingCart = () => {
         // console.log('Parent cart content: ', this.state.cart);
         if (this.state.cart.length > 0) {
-            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart, 'deleteItem': this.deleteItem.bind(this), 'restaurantId': this.state.restaurantId });
+            this.props.navigation.navigate('RestaurantCart', { 'cart': this.state.cart, 'deleteItem': this.deleteItem.bind(this), 'cleanCart': this.cleanCart.bind(this), 'restaurantId': this.state.restaurantId });
         }
     }
 

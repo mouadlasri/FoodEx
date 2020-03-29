@@ -1,15 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, AsyncStorage, Image, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TextInput, AsyncStorage, Image, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import NumericInput from 'react-native-numeric-input'
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import InputSpinner from 'react-native-input-spinner';
 import { ListItem } from 'react-native-elements'
-
+import Modal from 'react-native-modal';
 
 import * as Font from 'expo-font';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 class RestaurantCart extends React.Component {
 
@@ -19,7 +20,9 @@ class RestaurantCart extends React.Component {
             cart: null,
             total: null,
             connectedUserId: null,
-            restaurantId: null
+            restaurantId: null,
+            isModalVisible: false,
+            orderId: null
         }
     }
 
@@ -94,6 +97,23 @@ class RestaurantCart extends React.Component {
         this.props.route.params.deleteItem(itemIndex);
     }
      
+
+    // function to toggle the Order Confirmation modal on top of the view
+    toggleModalConfirmation = () => {
+        this.setState({ isModalVisible: !this.state.isModalVisible });
+        console.log(' Modal State : ', this.state.isModalVisible);
+    }
+
+    // function to return back to restaurant details page after closing the modal (successfull order placed)
+    goBackToRestaurantDetails = () => {
+        // clean the cart of child and parent components
+        this.setState({
+            cart: null
+        });
+        this.props.route.params.cleanCart();
+        this.props.navigation.navigate('RestaurantDetails');
+    }
+
     placeOrder = () => {
         // construct object to send as POST request to the API
         // console.log('Connected User ID => ', this.state.connectedUserId);
@@ -106,7 +126,12 @@ class RestaurantCart extends React.Component {
         axios.post('https://79950a69.ngrok.io/api/Restaurants/order', orderDetails).then(response => {
             console.log('STATUS => ', response.status);
             console.log('Data => ', response.data);
-            
+            // response.data contains the orderId (returned by the API)
+            this.setState({
+                orderId: response.data
+            });
+
+            this.toggleModalConfirmation();
         }).catch(error => {
             console.log('Error: ', error.response);
         });
@@ -139,20 +164,24 @@ class RestaurantCart extends React.Component {
                                     <View style={{ height: 12, backgroundColor: '#1A5632', paddingLeft: 0, borderTopRightRadius: 8, borderTopLeftRadius: 8 }}>
 
                                     </View>
+
                                     {/* Main Item Container */}
-                                    <View style={{ marginTop: 10, alignSelf: 'flex-start', width: '80%', paddingLeft: 55 }}>
+                                    <View style={{ flex: 1, paddingTop: 10, alignSelf: 'flex-start', width: '85%', paddingLeft: 55 }}>
+                                        
+                                        {/* Trash Icon */}
                                         <View style={styles.deleteItemButton}>
                                             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.deleteItemFromCart(index)}>
                                                 <Icon name='trash' size={30} color={'#c20000'}></Icon>
                                             </TouchableOpacity>
                                         </View>
+
                                         <Text style={{ fontSize: 20, marginBottom: 3 }}>{cartItem.itemName}</Text>
                                         <Text style={{ marginBottom: 3 }}>Quantity: {cartItem.quantity}</Text>
                                         <Text>Price: {parseFloat(cartItem.itemPrice).toFixed(2)} x {cartItem.quantity} = <Text style={{ fontWeight: 'bold', color: '#1A5632' }}>{parseFloat((cartItem.itemPrice) * parseFloat(cartItem.quantity)).toFixed(2)}</Text></Text>
                                     </View>
 
                                     {/* Bottom Banner */}
-                                    <View style={{ marginTop: 14, height: 10, backgroundColor: '#1A5632', paddingLeft: 0, borderBottomRightRadius: 8, borderBottomLeftRadius: 8 }}>
+                                    <View style={{height: 10, backgroundColor: '#1A5632', paddingLeft: 0, borderBottomRightRadius: 8, borderBottomLeftRadius: 8 }}>
 
                                     </View>
 
@@ -177,12 +206,25 @@ class RestaurantCart extends React.Component {
                                 <Text style={{fontSize: 26, fontWeight: 'bold'}}>Total:</Text>
                                 <Text style={{fontSize: 26}}>{parseFloat(this.state.total).toFixed(2)}</Text>
                             </View>
+
+                            {/* Place Order Button at the Bottom of the View */}
                             <TouchableOpacity style={styles.placeOrderButton} onPress={() => this.placeOrder()}>
                                     <Icon name='shopping-cart' color={'white'} size={25} style={{ marginRight: 7 }}/>
                                     <Text style={styles.placeOrderText}>Place Order</Text>
-                                    {/* Place Order */}
                             </TouchableOpacity>
-                           
+
+                            <View style={{flex: 1}}>
+                                <Modal isVisible={this.state.isModalVisible} style={{alignItems: 'center'}} >
+                                    <View style={styles.modalContainer}>
+                                        <Icon name='check-circle' color={'#1A5632'} size={55} style={{ marginRight: 7 }} />
+                                        <Text>Your order has been placed!</Text>
+                                        <Text style={{ marginTop: 5 }}>Order #{this.state.orderId}</Text>
+                                        <TouchableOpacity style={styles.returnMainMenuButton} onPress={() => { this.goBackToRestaurantDetails() }}>
+                                            <Text style={styles.returnMainMenuText}>Return to menu</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </Modal>
+                            </View>
                         </View>
                     </View>
                 </ImageBackground>
@@ -245,7 +287,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         width: 46,
         height: 46,
-        top: 16,
+        top: 26,
         right: -30,
         justifyContent: 'center',
         borderRadius: 100,
@@ -272,6 +314,35 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         letterSpacing: 2,
         paddingLeft: 7
+    },
+    modalContainer: {
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center', 
+        backgroundColor: 'white',
+        // height: '20%',
+        borderRadius: 10,
+        width: '70%',
+        paddingTop: 20,
+        paddingBottom: 20
+    },
+    returnMainMenuButton: {
+        marginTop: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingRight: 20,
+        paddingLeft: 20,
+        // width: '70%',
+        backgroundColor: '#1A5632',
+        borderRadius: 10,
+        
+    },
+    returnMainMenuText: {
+        color: 'white',
+        fontFamily: 'RobotoRegular',
+        textTransform: 'uppercase',
+        // letterSpacing: 1,
+        fontSize: 14
     }
 
 });
