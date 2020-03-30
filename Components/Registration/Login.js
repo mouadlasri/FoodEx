@@ -74,7 +74,7 @@ class Login extends React.Component {
 
         if (authFlag) {
             return (
-                <DrawerNavigator />
+                <DrawerNavigator connectedUserId={this.userId}/>
                 // <Home userId={this.state.userId}/>
             )
         }

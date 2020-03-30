@@ -63,16 +63,18 @@ class Home extends React.Component {
         return (
             
             <ScrollView style={{flex: 1}}>
-                <View style={{ flex: 1, backgroundColor: '#000'}}>
+                <View style={{ flex: 1}}>
                 
-                    <View style={{ flexDirection: 'row', paddingTop: 36, paddingBottom: 16, paddingLeft: 10, justifyContent: 'space-between'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 0.5, borderBottomColor: '#3c3c3c' }}>
+                        
                         <View style={{ justifyContent: 'center' }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-                                <Image source={{ uri: 'https://ui-avatars.com/api/?name=Mouad+Lasri&rounded=true' }} style={{ height: 75, width: 75 }} />
+                            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                                <Image source={{ uri: 'https://static.lematin.ma/files/lematin/images/articles/2018/06/509b571360adc2cc9b14ac4564b3cd82.gif' }} style={{ height: 180, width: '100%' }} resizeMode='cover' />
+                                {/* <Image source={{ uri: 'https://ui-avatars.com/api/?name=Mouad+Lasri&rounded=true' }} style={{ height: 75, width: 75 }} />
                                 <View style={{ justifyContent: 'center', paddingLeft: 10}}>
                                     <Text style={{ marginBottom: 2, color: 'white' }}>{this.state.firstName} {this.state.lastName}</Text>
                                     <ProgressBar progress={0.5} color={Colors.red800} style={{ height: 8, borderRadius: 8}}  />
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     
