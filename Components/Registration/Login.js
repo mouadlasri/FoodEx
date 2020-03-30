@@ -35,7 +35,7 @@ class Login extends React.Component {
         console.log("CURRENT STATE s=> ", this.state);
 
         // var responseStatus = await axios.post('https://localhost:44312/api/Users/', this.state);
-        axios.post('https://79950a69.ngrok.io/api/Users', this.state).then(response => {
+        axios.post('https://74af6529.ngrok.io/api/Users', this.state).then(response => {
             console.log('STATUS => ', response.status);
             console.log('User Found!, Id => ', response.data.userId);
             // this.props.navigation.navigate('Home', {'connectedUserId': response.userId});
@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
         // marginBottom: 20
     },
     loginContainer: {
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
         margin: 40,
-        borderRadius: 15,
+        borderRadius: 10,
         height: '60%',
         padding: 25
     }

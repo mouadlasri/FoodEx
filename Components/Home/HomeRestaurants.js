@@ -8,6 +8,8 @@ import Drawer from '@material-ui/core/Drawer';
 import Carousel from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import * as Font from 'expo-font';
+
 
 class HomeRestaurants extends React.Component {
     constructor(props) {
@@ -19,16 +21,23 @@ class HomeRestaurants extends React.Component {
         }
     }
 
-    orderHandler =  (restaurantId, restaurantLink) => {
-        // this.props.navigation.navigate('Login');
+    orderHandler = (restaurantId, restaurantLink) => {
+        // go to RestaurantDetails Page
         this.props.navigation.navigate('RestaurantDetails', { 'restaurantId': restaurantId, 'restaurantImage': restaurantLink });
-
-        console.log(`====================== ORDER HAAAAAAAAAANDLER==================== `);
-        // console.log('Restaurant Id clickde => ', restaurantId);
     }
 
-    componentDidMount() {
-        axios.get(`https://79950a69.ngrok.io/api/Restaurants/`).then(response => {
+    loadFonts = async () => {
+        await Font.loadAsync({
+            'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
+        });
+    }
+
+    async componentDidMount() {
+        await Font.loadAsync({
+            'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
+        });
+
+        axios.get(`https://74af6529.ngrok.io/api/Restaurants/`).then(response => {
             // console.log('Get Restaurant data: ', response.data);
             this.setState({ restaurantData: response.data });
             // console.log('Restaurant State Data: ', this.state.restaurantData);
@@ -81,7 +90,7 @@ class HomeRestaurants extends React.Component {
                     <View>
                     </View>
                     <ScrollView style={{ flex: 3, marginLeft: 20 }}>
-                        <Text style={{ marginTop: 20, fontSize: 20 }}>Restaurants</Text>
+                        <Text style={{ marginTop: 20, fontSize: 20, fontFamily: 'Pacifico', color: '#1A5632' }}>Restaurants</Text>
                         <View style={{ height: 300, borderStyle: 'solid', borderColor: 'black' }}>
                             <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
                                 {resultRestaurantList}

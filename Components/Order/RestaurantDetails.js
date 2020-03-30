@@ -39,10 +39,11 @@ class RestaurantDetails extends React.Component {
             'PoppinsRegular': require('../../assets/fonts/Poppins-Regular.ttf'),
             'PoppinsExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
             'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
+            'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf'),
+            'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf')
         });
 
-        axios.get(`https://79950a69.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+        axios.get(`https://74af6529.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             var results = {};
 
             // this loop constructs a dictionary based on the item category (ie: 'Paninis': [items])
@@ -145,7 +146,7 @@ class RestaurantDetails extends React.Component {
                 var results = Object.keys(itemsData).map((key) => {
                     return (
                         <ScrollView style={{ flex: 3, marginLeft: 20, marginTop: 16 }} key={key}>
-                            <Text style={{ marginTop: 10, fontSize: 20, fontFamily: 'RobotoBold', textTransform: 'uppercase' }}>{key}</Text>
+                            <Text style={{ marginTop: 10, fontSize: 22, fontFamily: 'Pacifico', letterSpacing: 2 }}>{key}</Text>
                             <View style={{ height: 260, borderStyle: 'solid', borderColor: 'black' }}>
                                 <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
                                     {/*For each food category display all its items using the function */}

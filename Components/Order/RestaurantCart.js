@@ -33,7 +33,9 @@ class RestaurantCart extends React.Component {
             'PoppinsRegular': require('../../assets/fonts/Poppins-Regular.ttf'),
             'PoppinsExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
             'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf')
+            'RobotoBold': require('../../assets/fonts/Roboto-Bold.ttf'),
+            'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf')
+
         });
         
         var userId = await AsyncStorage.getItem('connectedUserId');

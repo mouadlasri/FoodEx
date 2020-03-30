@@ -25,8 +25,7 @@ function DrawerContent(props) {
             <View style={{ margin: 0, marginTop: 15, justifyContent: 'space-between' }}>
                 
                 <ListItem
-                    containerStyle={{ }}
-                        leftAvatar={{ size:'large', source: { uri: props.avatarImage } }}
+                    leftAvatar={{ size:'large', source: { uri: props.avatarImage } }}
                     title={`${props.firstName} ${props.lastName}`}
                     titleStyle={{}}
                         subtitle={'progress bar here'}
@@ -39,9 +38,10 @@ function DrawerContent(props) {
                 <DrawerItemList {...props} />
                 <Divider style={{ height: 1, width: '80%', backgroundColor: '#c3c3c3', alignSelf: 'center', marginTop: 20 }} />
                 <DrawerItem
-                    icon={() => <Icon name={'power-off'} size={20} color={'crimson'} />}
-
-                    label="Log out"
+                    style={{marginTop: 20, paddingTop: 3, paddingBottom: 3, borderRadius:20, backgroundColor: '#79242F'}}
+                    icon={() => <Icon name={'power-off'} size={28} color={'white'} style={{ marginRight: 3 }} />}
+                    labelStyle={{color: 'white', marginLeft: 4, textTransform: 'uppercase'}}
+                    label="Logout"
                     onPress={() => props.navigation.closeDrawer()}
                 />
             </View>
@@ -67,7 +67,7 @@ function DrawerContent(props) {
          console.log('Drawer Async User ID=> ', x);
          this.setState({ userId: x });
 
-         axios.get(`https://79950a69.ngrok.io/api/Users/${this.state.userId}`).then(response => {
+         axios.get(`https://74af6529.ngrok.io/api/Users/${this.state.userId}`).then(response => {
              console.log('Get user data: ', response.data.firstName);
              this.setState({
                  userId: response.data.userId,

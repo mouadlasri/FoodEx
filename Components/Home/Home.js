@@ -31,7 +31,7 @@ class Home extends React.Component {
         var x = await AsyncStorage.getItem('connectedUserId');
         this.setState({ userId: x });
 
-        axios.get(`https://79950a69.ngrok.io/api/Users/${this.state.userId}`).then(response => {
+        axios.get(`https://74af6529.ngrok.io/api/Users/${this.state.userId}`).then(response => {
             console.log('Get user data: ', response.data.firstName);
             this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
         }).catch(error => console.log(error));
@@ -39,23 +39,7 @@ class Home extends React.Component {
 
     }
     componentDidMount() {  
-        // axios.get(`https://localhost:44312/api/Users/${this.state.userId}`).then(response => {
-        //     console.log('Get user data: ', response.data);
-        //     this.setState({ userId: response.data.userId });
-        // });
-        // this.storeUserId();
-        // this.setState({
-        //     userId: this.props.navigation.state.connectedUserId
-        // });
-
         this.retrieveUserId();
-       
-        // console.log(' HOME STATE ID => ', this.props.route.params.test);
-
-        // axios.get(`https://e3378e38.ngrok.io/api/Users/${this.state.userId}`).then(response => {
-        //     console.log('Get user data: ', response.data.firstName);
-        //     this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
-        // });
     }
     
     render() {
@@ -69,7 +53,7 @@ class Home extends React.Component {
                         
                         <View style={{ justifyContent: 'center' }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                                <Image source={{ uri: 'https://static.lematin.ma/files/lematin/images/articles/2018/06/509b571360adc2cc9b14ac4564b3cd82.gif' }} style={{ height: 180, width: '100%' }} resizeMode='cover' />
+                                <Image source={{ uri: 'https://static.lematin.ma/files/lematin/images/articles/2018/06/509b571360adc2cc9b14ac4564b3cd82.gif' }} style={{ height: 160, width: '100%' }} resizeMode='cover' />
                                 {/* <Image source={{ uri: 'https://ui-avatars.com/api/?name=Mouad+Lasri&rounded=true' }} style={{ height: 75, width: 75 }} />
                                 <View style={{ justifyContent: 'center', paddingLeft: 10}}>
                                     <Text style={{ marginBottom: 2, color: 'white' }}>{this.state.firstName} {this.state.lastName}</Text>

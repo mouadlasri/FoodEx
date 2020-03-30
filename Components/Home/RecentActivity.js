@@ -41,20 +41,17 @@ export default RecentActivity;
 
 const styles = StyleSheet.create({
     recentActivityContainer: {
-        // borderStyle: 'solid',
-        // borderWidth: 1,
-        // borderColor: '#000',
         height: 150,
         margin: 16,
         marginTop: 30
     },
     recentActivityTitle: {
         margin: 10,
-        // borderStyle: 'solid',
-        // borderWidth: 0.5,
-        // borderColor: '#000',
         alignSelf: 'flex-start',
-        padding: 5
+        padding: 5,
+        fontFamily: 'Pacifico',
+        color: '#1A5632',
+        fontSize: 20
     },
     recentActivityItems: {
         flexDirection: 'row',
