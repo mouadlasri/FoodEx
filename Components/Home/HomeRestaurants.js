@@ -87,10 +87,9 @@ class HomeRestaurants extends React.Component {
 
             return (
                 <ScrollView style={{flex: 1}}>
-                    <View>
-                    </View>
+                    
                     <ScrollView style={{ flex: 3, marginLeft: 20 }}>
-                        <Text style={{ marginTop: 20, fontSize: 20, fontFamily: 'Pacifico', color: '#1A5632' }}>Restaurants</Text>
+                        <Text style={{ marginTop: 20, fontSize: 20, fontFamily: 'Pacifico', color: 'black' }}>Restaurants</Text>
                         <View style={{ height: 300, borderStyle: 'solid', borderColor: 'black' }}>
                             <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
                                 {resultRestaurantList}
@@ -113,7 +112,7 @@ class HomeRestaurants extends React.Component {
 export default HomeRestaurants;
 
 const horizontalMargin = 20;
-const slideWidth = 250;
+const slideWidth = 200;
 
 const sliderWidth = Dimensions.get('window').width;
 const itemWidth = slideWidth + horizontalMargin * 2;

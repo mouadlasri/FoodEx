@@ -42,15 +42,15 @@ export default RecentActivity;
 const styles = StyleSheet.create({
     recentActivityContainer: {
         height: 150,
-        margin: 16,
-        marginTop: 30
+        margin: 0,
+        marginTop: 0
     },
     recentActivityTitle: {
-        margin: 10,
+        // margin: 10,
         alignSelf: 'flex-start',
         padding: 5,
         fontFamily: 'Pacifico',
-        color: '#1A5632',
+        color: 'black',
         fontSize: 20
     },
     recentActivityItems: {

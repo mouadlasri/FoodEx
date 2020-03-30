@@ -69,18 +69,13 @@ class Home extends React.Component {
                     </View>
                 
                 </View>
-                <View style={{ flex: 2, backgroundColor: '' }}>
-                    {/* <Text style={styles.orderTitle}>Make an Order</Text> */}
-                    {/* <Text style={styles.orderTitle}>Restaurants</Text> */}
-
-                    <HomeRestaurants navigation={this.props.navigation}/>
-                </View>
-                <View style={{ flex: 3, backgroundColor: '' }}>
+                <View style={{ flex: 2, marginLeft: 16 }}>
                     <RecentActivity />
                 </View>
-                <View style={{flex: 1}}>
-                    <Text>ID of user: {this.state.userId}</Text>
+                <View style={{ flex: 2 }}>
+                    <HomeRestaurants navigation={this.props.navigation}/>
                 </View>
+                
             </ScrollView>
         );
     }
@@ -93,9 +88,6 @@ const styles = StyleSheet.create({
     orderTitle: {
         margin: 10,
         marginLeft: 30,
-        // borderStyle: 'solid',
-        // borderWidth: 0.5,
-        // borderColor: '#000',
         alignSelf: 'flex-start',
         padding: 5,
         fontSize: 20

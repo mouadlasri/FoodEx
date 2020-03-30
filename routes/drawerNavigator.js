@@ -3,16 +3,17 @@ import { StyleSheet, Text, View, AsyncStorage, Image } from 'react-native';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem, DrawerView} from '@react-navigation/drawer';
-import Home from '../Components/Home/Home';
-import Profile from '../Components/User/Profile';
-import RestaurantDetails from '../Components/Order/RestaurantDetails';
-import RestaurantCart from '../Components/Order/RestaurantCart';
 import { Divider, ListItem } from 'react-native-elements';
 import axios from 'axios';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as Font from 'expo-font';
 
-import testComponent from './testComponent';
+import DetailedAnalytics from '../Components/User/DetailedAnalytics';
+import Home from '../Components/Home/Home';
+import Profile from '../Components/User/Profile';
+import RestaurantDetails from '../Components/Order/RestaurantDetails';
+import RestaurantCart from '../Components/Order/RestaurantCart';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -78,7 +79,10 @@ function DrawerContent(props) {
          }).catch(error => console.log(error));
      }
 
-     componentDidMount() {
+     async componentDidMount() {
+         await Font.loadAsync({
+             'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf')
+         });
         this.retrieveUserId();
     }
      
@@ -100,7 +104,7 @@ function DrawerContent(props) {
                         size={28}
                         name={'home'}></Icon>
                 }} />
-                <Drawer.Screen name="Detailed Analytics" options={{ headerShown: false }} component={Profile} options={{
+                <Drawer.Screen name="Detailed Analytics" options={{ headerShown: false }} component={DetailedAnalytics} options={{
                     drawerIcon: config => <Icon
                         size={23}
                         name={'bar-chart'}></Icon>
