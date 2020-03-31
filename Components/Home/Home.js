@@ -3,10 +3,13 @@ import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, Image, ScrollV
 import { TextField } from '@material-ui/core';
 import { NavigationContainer } from '@react-navigation/native';
 import { ProgressBar, Colors } from 'react-native-paper';
-import HomeRestaurants from './HomeRestaurants';
-import RecentActivity from './RecentActivity';
 import Drawer from '@material-ui/core/Drawer';
 import axios from 'axios';
+
+// Components
+import HomeRestaurants from './HomeRestaurants';
+import RecentActivity from './RecentActivity';
+import FoodexLogo from '../Logo/FoodexLogo';
 
 class Home extends React.Component {
     constructor(props) {
@@ -40,7 +43,10 @@ class Home extends React.Component {
     render() {
         // console.log(' HOME STATE ID => ', this.props.route.params.test);
         return (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
+                <View style={{height: 200, justifyContent: 'center',alignItems: 'center'}}>
+                    <FoodexLogo />
+                </View>
                 <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
                     <View style={{ flex: 1 }}>
 

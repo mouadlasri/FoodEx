@@ -28,6 +28,7 @@ class HomeRestaurants extends React.Component {
 
     loadFonts = async () => {
         await Font.loadAsync({
+            'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
             'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
         });
     }
