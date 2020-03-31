@@ -5,6 +5,10 @@ import axios from 'axios';
 import Home from '../Home/Home';
 import DrawerNavigator from '../../routes/drawerNavigator';
 import { TextInput } from 'react-native-paper';
+import * as Font from 'expo-font';
+
+import FoodexLogo from '../Logo/FoodexLogo';
+
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +17,8 @@ class Login extends React.Component {
             userId: '',
             userPassword: '',
             authFlag: false,
-            errorMessage: ''
+            errorMessage: '',
+            fontLoaded: false
         }
     } 
 
@@ -59,11 +64,13 @@ class Login extends React.Component {
     removeUserId = async () => {
         AsyncStorage.removeItem('connectedUserId');
     }
+
     storeUserId = async (x) => {
         // console.log('X => ', x);
         this.removeUserId();
         await AsyncStorage.setItem('connectedUserId', x.toString());
     }
+
     getUserId = async () => {
         let x = await AsyncStorage.getItem('connectedUserId');
         console.log('STORAGE => ', x);
@@ -92,7 +99,8 @@ class Login extends React.Component {
                     source={{ uri: 'https://wallpapershome.com/images/pages/pic_v/12115.jpg' }}>
                     <View style={styles.loginContainer}>
                         <Text style={{ justifyContent: 'center', textAlign: 'center', fontSize: 20}}>Welcome to</Text>
-                        <Text style={{ justifyContent: 'center' , textAlign: 'center', fontSize: 56, fontFamily: 'Roboto'}}>foodeX</Text>
+                        <FoodexLogo />
+                        {/* <Text style={{ justifyContent: 'center', textAlign: 'center', fontSize: 56, fontFamily: 'Roboto' }}>foodeX</Text> */}
                         <TextInput theme={{ colors: { primary: 'black' } }} mode={'flat'} name='userId' label='Username' value={this.state.userId} onChange={this.changeUserIdHandler} style={styles.input}  />
                         <TextInput theme={{ colors: { primary: 'black' } }} mode={'flat'} type='password' name='userPassword' label='Password' value={this.state.userPassword} onChange={this.changeUserPasswordHandler} style={styles.input} />
                         <Text>{errorMessage}</Text>

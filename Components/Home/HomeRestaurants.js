@@ -17,7 +17,8 @@ class HomeRestaurants extends React.Component {
         this.state = {
             userId: '',
             restaurantData: null,
-            selectedRestaurantId: ''
+            selectedRestaurantId: '',
+            fontLoaded: false
         }
     }
 
@@ -30,12 +31,12 @@ class HomeRestaurants extends React.Component {
         await Font.loadAsync({
             'RobotoRegular': require('../../assets/fonts/Roboto-Regular.ttf'),
             'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
-        });
+        }).then(() => this.setState({fontLoaded: true}))
     }
 
     componentDidMount() {
         this.loadFonts();
-
+      
         axios.get(`https://aae295ea.ngrok.io/api/Restaurants/`).then(response => {
             // console.log('Get Restaurant data: ', response.data);
             this.setState({ restaurantData: response.data });
@@ -48,53 +49,48 @@ class HomeRestaurants extends React.Component {
     // Dynamically change the styling of the waiting time
     waitingTimeStyle = (waitingTime) => {
         // console.log('Waiting Time => ', waitingTime);
-      
         switch (waitingTime) {
+            // fontfamily: 'Roboto', fontSize: 30, fontWeight: 'bold'
             case 'Long':
-                return { color: 'red', }
+                return { color: 'crimson', fontWeight: 'bold' }
             case 'Medium':
-                return { color: '#F5B335', }
+                return { color: '#F5B335', fontWeight: 'bold'}
             case 'Low':
-                return { color: '#1A5632',}
+                return { color: '#1A5632', fontWeight: 'bold'}
         }
     }
 
     
     render() {
         
-        if (this.state.restaurantData != null) {
+        if (this.state.restaurantData != null && this.state.fontLoaded == true) {
             // console.log('STATE of Restaqurant Data => ', this.state.restaurantData);
             const resultRestaurantList = this.state.restaurantData.map((restaurant) => {
                 return (
-                    <View style={{ flex: 1, height: 145, marginRight: 25, marginLeft: 25, marginBottom: 20 }} key={restaurant.restaurantId}>
+                    <View style={{ flex: 1, height: 135, marginRight: 25, marginLeft: 25, marginBottom: 20 }} key={restaurant.restaurantId}>
                         <TouchableOpacity onPress={() => { this.orderHandler(restaurant.restaurantId, restaurant.imageLink) }}>
                             <ImageBackground style={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} resizeMode='cover' source={{ uri: restaurant.imageLink }}>
-                                <View style={{ backgroundColor: 'rgba(0,0,0,0.6)', height: '100%', width: '100%', justifyContent: 'center' }}>
-                                    <Text style={{ alignSelf: 'center', color: 'white', fontSize: 20, fontWeight: 'bold' }}>{restaurant.restaurantName}</Text>
+                               
+                                <View style={{ alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)', height: '100%', width: '100%', justifyContent: 'center' }}>
+                                    
+                                    <Text style={{ fontFamily: 'Pacifico', color: 'white', fontSize: 20, fontWeight: 'bold' }}>{restaurant.restaurantName}</Text>
+                                    {/* <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Icon name='home' size={20} color={'white'} style={{marginRight: 5}}></Icon>
+                                        <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>{restaurant.restaurantLocation}</Text>
+                                    </View> */}
+                                    
                                 </View>
+                                
                             </ImageBackground>
                         </TouchableOpacity>
                        
-                        {/* <View style={{ flex: 3}}>
-                            <Image style={{ flex: 1, borderTopRightRadius: 10, borderTopLeftRadius: 10 }} resizeMode='cover' source={{ uri: restaurant.imageLink }} />
-                        </View>
-                        <View style={{ flex: 2, fontSize: 14, marginLeft: 10}}>
-                            <Text style={{ marginBottom: 0, fontSize: 26}}>{restaurant.restaurantName}</Text>
-                            <Text style={{ }}>{restaurant.restaurantDescription} </Text>
-                            <Text style={{ }} style={this.waitingTimeStyle(restaurant.waitingTime)} >{restaurant.waitingTime} </Text>
-                        </View>
-                        <View style={{ flex: 1, backgroundColor: '#1A5632', justifyContent: 'center', borderBottomRightRadius: 10, borderBottomLeftRadius: 10 }}>
-                            <Icon.Button name="shopping-basket" backgroundColor='#1A5632' style={{ justifyContent: 'center' }} onPress={() => { this.orderHandler(restaurant.restaurantId, restaurant.imageLink) }}>
-                                <Text style={{ textAlign: 'center', color: '#fff' }}>Make an Order!</Text>
-                            </Icon.Button>
-                        </View> */}
                     </View> 
                 )
             });
 
             return (
                 <View style={{ flex: 1 }}>
-                    <ScrollView style={{  }}>
+                    <ScrollView>
                         {resultRestaurantList}
                     </ScrollView>
                 </View>

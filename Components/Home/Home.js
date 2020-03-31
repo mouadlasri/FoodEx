@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ProgressBar, Colors } from 'react-native-paper';
 import Drawer from '@material-ui/core/Drawer';
 import axios from 'axios';
+import { Divider } from 'react-native-elements';
 
 // Components
 import HomeRestaurants from './HomeRestaurants';
@@ -44,13 +45,18 @@ class Home extends React.Component {
         // console.log(' HOME STATE ID => ', this.props.route.params.test);
         return (
             <View style={{ flex: 1 }}>
-                <View style={{height: 200, justifyContent: 'center',alignItems: 'center'}}>
+                {/* Green Header */}
+                <View style={{ position: 'absolute', top: 0, right: 0, left: 0, height: 25, backgroundColor: '#1A5632', elevation: 10 }}>
+
+                </View>
+                <View style={{ height: 100, marginTop: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
                     <FoodexLogo />
+                    <Divider style={{ height: 3, backgroundColor: 'black', width: '10%', marginTop: 10}} />
                 </View>
                 <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
                     <View style={{ flex: 1 }}>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 0.5, borderBottomColor: '#3c3c3c' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
                             <View style={{ justifyContent: 'center' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -73,8 +79,9 @@ class Home extends React.Component {
                     </View>
 
                 </ScrollView>
-                <View style={{ position: 'absolute', bottom: 0, right: 0, left: 0, height: 50, backgroundColor: '#1A5632', elevation: 10 }}>
-
+                {/* Green Footer */}
+                <View style={styles.footer}>
+                    <Text style={{ color: 'white' }}>{'\u00A9'} Mouad Lasri - 2020</Text>
                 </View>
             </View>
             
@@ -93,5 +100,17 @@ const styles = StyleSheet.create({
         padding: 5,
         fontSize: 20
     },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        left: 0,
+        height: 50,
+        backgroundColor: '#1A5632',
+        elevation: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white'
+    }
     
 })
