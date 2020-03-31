@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, Image, Dimensions, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import { TextField } from '@material-ui/core';
 import { NavigationContainer } from '@react-navigation/native';
 import { ProgressBar, Colors } from 'react-native-paper';
@@ -32,12 +32,10 @@ class HomeRestaurants extends React.Component {
         });
     }
 
-    async componentDidMount() {
-        await Font.loadAsync({
-            'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
-        });
+    componentDidMount() {
+        this.loadFonts();
 
-        axios.get(`https://74af6529.ngrok.io/api/Restaurants/`).then(response => {
+        axios.get(`https://aae295ea.ngrok.io/api/Restaurants/`).then(response => {
             // console.log('Get Restaurant data: ', response.data);
             this.setState({ restaurantData: response.data });
             // console.log('Restaurant State Data: ', this.state.restaurantData);
@@ -48,7 +46,7 @@ class HomeRestaurants extends React.Component {
     
     // Dynamically change the styling of the waiting time
     waitingTimeStyle = (waitingTime) => {
-        console.log('Waiting Time => ', waitingTime);
+        // console.log('Waiting Time => ', waitingTime);
       
         switch (waitingTime) {
             case 'Long':
@@ -67,8 +65,16 @@ class HomeRestaurants extends React.Component {
             // console.log('STATE of Restaqurant Data => ', this.state.restaurantData);
             const resultRestaurantList = this.state.restaurantData.map((restaurant) => {
                 return (
-                    <View style={styles.menuItem} key={restaurant.restaurantId}>
-                        <View style={{ flex: 3}}>
+                    <View style={{ flex: 1, height: 145, marginRight: 25, marginLeft: 25, marginBottom: 20 }} key={restaurant.restaurantId}>
+                        <TouchableOpacity onPress={() => { this.orderHandler(restaurant.restaurantId, restaurant.imageLink) }}>
+                            <ImageBackground style={{ height: '100%', alignItems: 'center', justifyContent: 'center' }} resizeMode='cover' source={{ uri: restaurant.imageLink }}>
+                                <View style={{ backgroundColor: 'rgba(0,0,0,0.6)', height: '100%', width: '100%', justifyContent: 'center' }}>
+                                    <Text style={{ alignSelf: 'center', color: 'white', fontSize: 20, fontWeight: 'bold' }}>{restaurant.restaurantName}</Text>
+                                </View>
+                            </ImageBackground>
+                        </TouchableOpacity>
+                       
+                        {/* <View style={{ flex: 3}}>
                             <Image style={{ flex: 1, borderTopRightRadius: 10, borderTopLeftRadius: 10 }} resizeMode='cover' source={{ uri: restaurant.imageLink }} />
                         </View>
                         <View style={{ flex: 2, fontSize: 14, marginLeft: 10}}>
@@ -80,23 +86,17 @@ class HomeRestaurants extends React.Component {
                             <Icon.Button name="shopping-basket" backgroundColor='#1A5632' style={{ justifyContent: 'center' }} onPress={() => { this.orderHandler(restaurant.restaurantId, restaurant.imageLink) }}>
                                 <Text style={{ textAlign: 'center', color: '#fff' }}>Make an Order!</Text>
                             </Icon.Button>
-                        </View>
+                        </View> */}
                     </View> 
                 )
             });
 
             return (
-                <ScrollView style={{flex: 1}}>
-                    
-                    <ScrollView style={{ flex: 3, marginLeft: 20 }}>
-                        <Text style={{ marginTop: 20, fontSize: 20, fontFamily: 'Pacifico', color: 'black' }}>Restaurants</Text>
-                        <View style={{ height: 300, borderStyle: 'solid', borderColor: 'black' }}>
-                            <ScrollView horizontal={true} contentContainerStyle={{ justifyContent: 'space-between' }} showsHorizontalScrollIndicator={false} >
-                                {resultRestaurantList}
-                            </ScrollView>
-                        </View>
+                <View style={{ flex: 1 }}>
+                    <ScrollView style={{  }}>
+                        {resultRestaurantList}
                     </ScrollView>
-                </ScrollView>
+                </View>
             )
         }
 

@@ -33,7 +33,6 @@ class RestaurantDetails extends React.Component {
     }
 
     async componentDidMount() {
-        console.log('DETAILED RESTAURANT ID => ', this.props.route.params.restaurantId);
         // Loading fonts
         await Font.loadAsync({
             'PoppinsRegular': require('../../assets/fonts/Poppins-Regular.ttf'),
@@ -43,7 +42,7 @@ class RestaurantDetails extends React.Component {
             'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf')
         });
 
-        axios.get(`https://74af6529.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+        axios.get(`https://aae295ea.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             var results = {};
 
             // this loop constructs a dictionary based on the item category (ie: 'Paninis': [items])
@@ -75,10 +74,7 @@ class RestaurantDetails extends React.Component {
     }
 
     addItemToCart = (itemToAdd, quantity) => {
-        // console.log('Parent Item Added to acrt => ', itemToAdd);
-        // console.log('Parent Quantity Added to Cart => ', quantity);
-        // console.log('Parent Item added to cart => ', itemToAdd);
-        // console.log('Parent Quantity added to cart => ', this.state.number);
+        // Add idem to the cart
         this.setState({
             cart: [...this.state.cart, {'itemId': itemToAdd.itemId, 'itemName': itemToAdd.itemName, 'itemPrice': itemToAdd.itemPrice, 'itemImage': itemToAdd.itemImage, quantity}]
         });
@@ -93,7 +89,7 @@ class RestaurantDetails extends React.Component {
             return index != indexToDelete
         });
 
-        console.log(this.state.cart.length);
+        // console.log(this.state.cart.length);
 
         this.setState({
             cart: newCart
@@ -179,10 +175,11 @@ class RestaurantDetails extends React.Component {
                         {/* Shopping Cart Button to send user to the Shopping Cart screen */}
                         <View style={{ margin: 5, justifyContent: 'center', alignContent: 'center', height: 75, width: 75, backgroundColor: '#F4C430', borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}>
                             <TouchableOpacity style={{ alignSelf: 'center' }} onPress={() => { this.goToShoppingCart() }}>
-
-                                <Text style={{ fontSize: 20 }}>
+                                
+                                <Text style={{ fontSize: 22 }}>
+                                    
                                     {this.state.cart.length}
-                                    <Icon name='shopping-cart' size={20} />
+                                    <Icon name='shopping-cart' size={25} />
                                 </Text>
                             </TouchableOpacity>
                         </View>

@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
         // margin: 10,
         alignSelf: 'flex-start',
         padding: 5,
-        fontFamily: 'Pacifico',
         color: 'black',
         fontSize: 20
     },

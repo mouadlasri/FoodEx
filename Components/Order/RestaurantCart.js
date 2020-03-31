@@ -125,7 +125,7 @@ class RestaurantCart extends React.Component {
             RestaurantId: this.state.restaurantId
         }
 
-        axios.post('https://79950a69.ngrok.io/api/Restaurants/order', orderDetails).then(response => {
+        axios.post('https://aae295ea.ngrok.io/api/Restaurants/order', orderDetails).then(response => {
             console.log('STATUS => ', response.status);
             console.log('Data => ', response.data);
             // response.data contains the orderId (returned by the API)

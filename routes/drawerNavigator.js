@@ -39,10 +39,10 @@ function DrawerContent(props) {
                 <DrawerItemList {...props} />
                 <Divider style={{ height: 1, width: '80%', backgroundColor: '#c3c3c3', alignSelf: 'center', marginTop: 20 }} />
                 <DrawerItem
-                    style={{marginTop: 20, paddingTop: 3, paddingBottom: 3, borderRadius:20, backgroundColor: '#79242F'}}
-                    icon={() => <Icon name={'power-off'} size={28} color={'white'} style={{ marginRight: 3 }} />}
-                    labelStyle={{color: 'white', marginLeft: 4, textTransform: 'uppercase'}}
-                    label="Logout"
+                    style={{marginTop: 20, paddingTop: 3, paddingBottom: 3, backgroundColor: '#79242F', alignItems: 'center'}}
+                    icon={() => <Icon name={'power-off'} size={28} color={'white'} />}
+                    labelStyle={{color: 'white', fontWeight: 'bold', textTransform: 'uppercase'}}
+                    label="Log out"
                     onPress={() => props.navigation.closeDrawer()}
                 />
             </View>
@@ -68,7 +68,7 @@ function DrawerContent(props) {
          console.log('Drawer Async User ID=> ', x);
          this.setState({ userId: x });
 
-         axios.get(`https://74af6529.ngrok.io/api/Users/${this.state.userId}`).then(response => {
+         axios.get(`https://aae295ea.ngrok.io/api/Users/${this.state.userId}`).then(response => {
              console.log('Get user data: ', response.data.firstName);
              this.setState({
                  userId: response.data.userId,
@@ -79,10 +79,14 @@ function DrawerContent(props) {
          }).catch(error => console.log(error));
      }
 
-     async componentDidMount() {
+     loadFoat = async () => {
          await Font.loadAsync({
              'Pacifico': require('../assets/fonts/Pacifico-Regular.ttf')
          });
+    }
+
+      componentDidMount() {
+        this.loadFoat();
         this.retrieveUserId();
     }
      
