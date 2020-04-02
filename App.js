@@ -7,6 +7,9 @@ import Home from './Components/Home/Home';
 import Login from './Components/Registration/Login';
 import RestaurantDetails from './Components/Order/RestaurantDetails';
 
+// testing
+import DetailedAnalytics from './Components/User/DetailedAnalytics';
+
 import Navigator from './routes/homeStack';
 // import { Drawer } from '@material-ui/core';
 
@@ -23,10 +26,11 @@ export default class App extends React.Component {
   render() {
  
     return (
-      <NavigationContainer>
-        <Login />
+      <DetailedAnalytics />
+      // <NavigationContainer>
+      //   <Login />
 
-      </NavigationContainer>
+      // </NavigationContainer>
       // <NavigationContainer>
       //   <Stack.Navigator>
       //     <Stack.Screen name='Login' component={Login} />
