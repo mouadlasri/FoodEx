@@ -37,7 +37,7 @@ class HomeRestaurants extends React.Component {
     componentDidMount() {
         this.loadFonts();
       
-        axios.get(`https://0a575555.ngrok.io/api/Restaurants/`).then(response => {
+        axios.get(`https://6f212dcd.ngrok.io/api/Restaurants/`).then(response => {
             // console.log('Get Restaurant data: ', response.data);
             this.setState({ restaurantData: response.data });
             // console.log('Restaurant State Data: ', this.state.restaurantData);

@@ -27,10 +27,18 @@ export default class App extends React.Component {
  
     return (
       <DetailedAnalytics />
+
+
       // <NavigationContainer>
       //   <Login />
 
       // </NavigationContainer>
+
+
+      
+      
+      
+      
       // <NavigationContainer>
       //   <Stack.Navigator>
       //     <Stack.Screen name='Login' component={Login} />

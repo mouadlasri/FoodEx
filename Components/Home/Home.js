@@ -30,7 +30,7 @@ class Home extends React.Component {
         var x = await AsyncStorage.getItem('connectedUserId');
         this.setState({ userId: x });
 
-        axios.get(`https://0a575555.ngrok.io/api/Users/${this.state.userId}`).then(response => {
+        axios.get(`https://6f212dcd.ngrok.io/api/Users/${this.state.userId}`).then(response => {
             // console.log('Get user data: ', response.data.firstName);
             this.setState({ userId: response.data.userId, firstName: response.data.firstName, lastName: response.data.lastName });
         }).catch(error => console.log(error));

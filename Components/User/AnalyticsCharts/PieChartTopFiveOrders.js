@@ -1,8 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput, AsyncStorage, Image, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import axios from 'axios';
-
+import { VictoryChart, ChartContainer, ChartWrapper, VictoryPie, VictoryAxis, VictoryLegend } from 'victory-native';
 import { PieChart } from 'react-native-chart-kit';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Divider } from 'react-native-elements';
+
+
 
 const screenWidth = Dimensions.get("window").width - 20;
 
@@ -18,63 +22,63 @@ class PieChartTopFiveOrders extends React.Component {
 
     componentDidMount() {
         var localPieData = [];
-        axios.get(`https://6566eeac.ngrok.io/api/UserAnalytics/67887/topFiveOrders`).then(response => {
+        axios.get(`https://6f212dcd.ngrok.io/api/UserAnalytics/67887/topFiveOrders`).then(response => {
             // console.log('Get pie data: ', response.data);
             for (var i = 0; i < response.data.length; i++) {
                 // assign a color to the appropriate restaurant
                 console.log('response => ', response.data[i]);
-                // console.log('item => ', response.data[i]);
+                console.log('item => ', response.data[i]);
+
+                // push the data of the pie chart into the local variable before updating the state itself
                 localPieData.push({
-                    ...response.data[i],
-                    color: this.state.colors[i],
-                    legendFontSize: 15,
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 15,
+                    x: `${response.data[i].name} (${response.data[i].restaurantName})`,
+                    y: response.data[i].quantityOrdered
                 });
             }
             
             this.setState({
                 pieData: localPieData
             });
-            console.log('State: ', this.state);
+            // console.log('State: ', this.state);
         }).catch(error => console.log(error));
     }
 
     render() {
 
-        if (this.state.pieData != null) {
+        if (this.state.pieData != null ) {
             // console.log('State Data:   ', this.state.pieData);
             return (
                 <View style={styles.chartContainer}>
-                    <Text style={{ color: 'black', fontSize: 18, marginBottom: 5, marginTop: 12 }}>Most ordered items: </Text>
-                    <PieChart
-                        data={this.state.pieData}
+                    <Text style={{ fontSize: 18,  marginBottom: 5, marginTop: 20, alignSelf: 'center' }}>Most ordered items: </Text>
+                    <Divider style={{ marginTop: 20, width: '20%', alignSelf: 'center' }} />
+                    <View style={{alignSelf: 'center', padding: 0}}>
+                        <VictoryPie
+                            data={this.state.pieData}
+                            width={screenWidth * 0.9}
+                            height={300}
+                            padAngle={3}
+                            innerRadius={50}
+                            labelRadius={110}
+                            colorScale={this.state.colors}
+                            style={{ labels: { fill: "black", fontSize: 16, alignSelf: 'flex-start', } }}
+                            labels={({ datum }) => `${datum.y}`}
+                        />
+                    </View>
+                   
+
+                   
+                    <VictoryLegend
+                        orientation="vertical"
+                        colorScale={this.state.colors}
+                        height={180}
+                        x={45} y={0}
+                        color={'white'}
+                        style={{ labels: {fill: 'black', fontSize: 13}, color: 'white' }}
                         width={screenWidth}
-                        height={220}
-                        chartConfig={{
-                            backgroundColor: '#56B1D0',
-                            backgroundGradientFrom: '#56B1D0',
-                            backgroundGradientTo: '#54E1A5',
-                            decimalPlaces: 2, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 20
-                            },
-                            propsForLabels: {
-                                fill:"#134234",
-                                fontSize: 8,
-                                marginTop: 30,
-                                fontWeight: 'bold',
-                                color: '#123456',
-                                stroke: "#ffa726"
-                            },
-                            
-                        }}
-                        accessor="quantityOrdered"
-                        backgroundColor="transparent"
-                        paddingLeft="15"
-                        // absolute // to show percentagse instead of absolute values
+                        // itemsPerRow={1}
+                        data={this.state.pieData.map(({ x }) => ({ name: x }))}
                     />
+                        
                 </View>
             );
         }
@@ -90,14 +94,20 @@ export default PieChartTopFiveOrders;
 
 const styles = StyleSheet.create({
     chartContainer: {
-        borderColor: 'gray',
-        borderRadius: 10,
-        borderWidth: 1,
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.03)',
+      
+        backgroundColor: 'white',
         width: '90%',
-        justifyContent: 'center',
-        alignSelf: 'center'
+        // height: 470,
+        // justifyContent: 'center',
+        alignSelf: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 9,
+        },
+        shadowOpacity: 0.50,
+        shadowRadius: 12.35,
+        elevation: 19,
     }
 
 })

@@ -42,7 +42,7 @@ class RestaurantDetails extends React.Component {
             'Pacifico': require('../../assets/fonts/Pacifico-Regular.ttf')
         });
 
-        axios.get(`https://0a575555.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
+        axios.get(`https://6f212dcd.ngrok.io/api/Restaurants/${this.props.route.params.restaurantId}/ItemCategories`).then(response => {
             var results = {};
 
             // this loop constructs a dictionary based on the item category (ie: 'Paninis': [items])
