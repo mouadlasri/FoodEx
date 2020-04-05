@@ -7,7 +7,7 @@ import PieChartTopFiveOrders from './AnalyticsCharts/PieChartTopFiveOrders';
 import PieChartRestaurantsOrdersRatio from './AnalyticsCharts/PieChartRestaurantsOrdersRatio';
 import ActivityChart from './AnalyticsCharts/ActivityChart';
 import ProgressCircle from 'react-native-progress-circle';
-
+import ExpensesOverMonths from './AnalyticsCharts/ExpensesOverMonths';
 
 import {
     LineChart,
@@ -88,8 +88,10 @@ class DetailedAnalytics extends React.Component {
                     <ActivityChart />
 
                     {/* Top Five Orders ordered by the User */}
-                    <PieChartTopFiveOrders />
+                    {/* <PieChartTopFiveOrders /> */}
 
+                    {/* Expenses of user over months Line Chart */}
+                    <ExpensesOverMonths />
                 </View>
                 {/* <PieChartRestaurantsOrdersRatio /> */}
                 {/* <ActivityChart /> */}

@@ -26,26 +26,26 @@ export default class App extends React.Component {
   render() {
  
     return (
-      <DetailedAnalytics />
+      // <DetailedAnalytics />
 
 
-      // <NavigationContainer>
-      //   <Login />
-
-      // </NavigationContainer>
+      // Correct navigation
+      <NavigationContainer>
+        <Login />
+      </NavigationContainer>
 
 
       
       
       
       
-      // <NavigationContainer>
-      //   <Stack.Navigator>
-      //     <Stack.Screen name='Login' component={Login} />
-      //     <Stack.Screen name='Home' children={createDrawerNavigator} />
-      //     {/* <Stack.Screen name='RestaurantDetails' component={RestaurantDetails} /> */}
-      //   </Stack.Navigator>
-      // </NavigationContainer>
+    //   <NavigationContainer>
+    //     <Stack.Navigator>
+    //       <Stack.Screen name='Login' component={Login} />
+    //       <Stack.Screen name='Home' children={createDrawerNavigator} />
+    //       {/* <Stack.Screen name='RestaurantDetails' component={RestaurantDetails} /> */}
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
     );
   }
   // return (

@@ -29,7 +29,7 @@ class PieChartRestaurantsOrdersRatio extends React.Component {
 
     componentDidMount() {
         var localPieData = []
-        axios.get(`https://6566eeac.ngrok.io/api/UserAnalytics/67887/numberOrdersByRestaurant`).then(response => {
+        axios.get(`https://683e9d34.ngrok.io/api/UserAnalytics/67887/numberOrdersByRestaurant`).then(response => {
             // iterate through the response
             for (var i = 0; i < response.data.length; i++) {
 

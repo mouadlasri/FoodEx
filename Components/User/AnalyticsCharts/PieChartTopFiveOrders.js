@@ -22,7 +22,7 @@ class PieChartTopFiveOrders extends React.Component {
 
     componentDidMount() {
         var localPieData = [];
-        axios.get(`https://6f212dcd.ngrok.io/api/UserAnalytics/67887/topFiveOrders`).then(response => {
+        axios.get(`https://683e9d34.ngrok.io/api/UserAnalytics/67887/topFiveOrders`).then(response => {
             // console.log('Get pie data: ', response.data);
             for (var i = 0; i < response.data.length; i++) {
                 // assign a color to the appropriate restaurant
